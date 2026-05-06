@@ -292,26 +292,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Infinite Carousel Marquee Logic
   const carouselMarquee = document.getElementById('carouselMarquee');
   if (carouselMarquee) {
-    // Duplicate the content to create a seamless loop
-    const carouselContent = carouselMarquee.innerHTML;
-    carouselMarquee.innerHTML += carouselContent;
-  }
+    const originalHTML = carouselMarquee.innerHTML;
+    carouselMarquee.innerHTML = originalHTML.repeat(4);
 
+    // Wait for all images to fully load first
+    window.addEventListener('load', () => {
+      const oneSetWidth = carouselMarquee.scrollWidth / 4;
+
+      const styleSheet = document.createElement('style');
+      styleSheet.textContent = `
+      @keyframes scrollMarquee {
+        0%   { transform: translateX(0px); }
+        100% { transform: translateX(-${oneSetWidth}px); }
+      }
+    `;
+      document.head.appendChild(styleSheet);
+    });
+  }
   // 5. Menu Gallery Fit-to-Screen Modal Logic
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImg');
   const antigravityImgs = document.querySelectorAll('.antigravity-float');
-  
+
   if (modal && modalImg) {
     antigravityImgs.forEach(img => {
-      img.addEventListener('click', function() {
+      img.addEventListener('click', function () {
         modal.style.display = "flex";
         modalImg.src = this.src;
       });
     });
 
     // Close on click anywhere
-    modal.addEventListener('click', function() {
+    modal.addEventListener('click', function () {
       modal.style.display = "none";
     });
   }
