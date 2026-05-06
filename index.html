@@ -14,6 +14,14 @@
 </head>
 <body>
 
+  <!-- Global Background Crossfade -->
+  <div class="bg-crossfade-container">
+    <div class="bg-layer bg-layer-1" style="background-image: url('assets/Background1.jpeg');"></div>
+    <div class="bg-layer bg-layer-2" style="background-image: url('assets/Background2.jpeg');"></div>
+    <div class="bg-layer bg-layer-3" style="background-image: url('assets/Background3.jpeg');"></div>
+    <div class="bg-overlay"></div>
+  </div>
+
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg fixed-top navbar-glass">
     <div class="container">
@@ -35,55 +43,84 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="hero-section hero-home">
-    <div class="floating-particles"></div>
-    <div class="container hero-content ethereal">
-      <h2 class="hero-subtitle">Welcome To</h2>
-      <h1 class="brand-font display-1 mb-4">The Grand Monarque</h1>
-      <p class="lead text-light mb-5" style="max-width: 600px; margin: 0 auto;">Experience culinary perfection suspended in time. Elevating classic flavors to a weightless realm.</p>
-      <div class="d-flex gap-3 justify-content-center">
-        <a href="menu.html" class="btn btn-gold weightless weightless-delay-1" style="display: inline-block;">View Menu</a>
-        <a href="reserve.html" class="btn btn-gold weightless weightless-delay-3" style="display: inline-block;">Reserve Table</a>
+  <!-- Header & Hero Section -->
+  <header class="hero-section antigravity-hero">
+    <div class="container hero-content ethereal text-center">
+      <h1 class="brand-font display-1 mb-4 gold-accent mt-5">Welcome to Grand Monarque</h1>
+      <div class="hero-description mx-auto mt-4" style="max-width: 800px;">
+        <p class="lead text-light mb-3">Experience a transcendent culinary journey where the wild, bold spirit of Australia meets the vibrant, spice-laden heritage of Sri Lanka. At Grand Monarque, we don’t just serve meals; we curate weightless moments of gastronomic perfection.</p>
+        <p class="lead text-light mb-5">Indulge in our carefully crafted symphony of flavors, designed to elevate your dining experience to an ethereal realm of luxury and sophistication.</p>
       </div>
     </div>
   </header>
 
-  <!-- Featured Items -->
-  <section class="py-5 my-5">
+  <!-- Infinite Horizontal Food Carousel -->
+  <div class="carousel-marquee-wrapper">
+    <div class="carousel-marquee" id="carouselMarquee">
+      <!-- Original items -->
+      <img src="assets/carsoul1.jpeg" alt="Carousel Image 1">
+      <img src="assets/carsoul2.jpeg" alt="Carousel Image 2">
+      <img src="assets/carsoul3.jpeg" alt="Carousel Image 3">
+      <img src="assets/carsoul4.jpeg" alt="Carousel Image 4">
+      <img src="assets/carsoul5.jpeg" alt="Carousel Image 5">
+      <!-- Duplicates for seamless looping will be added via JS -->
+    </div>
+  </div>
+
+  <!-- Antigravity Meal Sections -->
+  <section class="antigravity-meals-section py-5">
     <div class="container">
-      <h2 class="menu-category-title ethereal">Featured Creations</h2>
-      <div class="row g-4 mt-4">
-        <!-- Featured 1 -->
-        <div class="col-md-4 ethereal delay-100">
-          <div class="glass-card text-center">
-            <img src="assets/menu2.png" alt="Seafood Kottu" class="weightless">
-            <h3 class="menu-item-name mt-3">Seafood Kottu</h3>
-            <p class="menu-item-price my-2">$30.99</p>
-            <p class="menu-item-desc">A premium mix of seafood tossed with shredded flatbread and signature spices.</p>
-          </div>
+      
+      <!-- Breakfast -->
+      <div class="row align-items-center meal-row mb-5">
+        <div class="col-md-6 meal-text">
+          <h2 class="brand-font text-gold display-4 mb-3">Breakfast</h2>
+          <ul class="meal-highlights list-unstyled lead">
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Grilled Sourdough</li>
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Breakfast Burritos</li>
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Sri Lankan Roast Bread with Dahl</li>
+          </ul>
         </div>
-        <!-- Featured 2 -->
-        <div class="col-md-4 ethereal delay-200">
-          <div class="glass-card text-center">
-            <img src="assets/menu4.png" alt="Arancini di Monarque" class="weightless weightless-delay-1">
-            <h3 class="menu-item-name mt-3">Arancini di Monarque</h3>
-            <p class="menu-item-price my-2">$18.50</p>
-            <p class="menu-item-desc">Truffle-infused rice balls with a molten mozzarella heart, spiced arrabbiata dip.</p>
-          </div>
-        </div>
-        <!-- Featured 3 -->
-        <div class="col-md-4 ethereal delay-300">
-          <div class="glass-card text-center">
-            <img src="assets/menu5.png" alt="Smokeshow Burger" class="weightless weightless-delay-2">
-            <h3 class="menu-item-name mt-3">Smokeshow Burger</h3>
-            <p class="menu-item-price my-2">$25.99</p>
-            <p class="menu-item-desc">Thick-cut beef patty, double bacon, cheese, caramelized onion, smoky BBQ sauce.</p>
-          </div>
+        <div class="col-md-6 text-center">
+          <img src="assets/Breakfast.png" alt="Breakfast Selection" class="img-fluid float meal-img">
         </div>
       </div>
+
+      <!-- Lunch -->
+      <div class="row align-items-center meal-row mb-5 flex-md-row-reverse">
+        <div class="col-md-6 meal-text text-md-start text-lg-end">
+          <h2 class="brand-font text-gold display-4 mb-3">Lunch</h2>
+          <ul class="meal-highlights list-unstyled lead">
+            <li class="mb-2">Smokeshow Burgers<i class="bi bi-star-fill text-gold ms-2"></i></li>
+            <li class="mb-2">Firehawk Chicken<i class="bi bi-star-fill text-gold ms-2"></i></li>
+            <li class="mb-2">Fresh Salmon Niçoise Salad<i class="bi bi-star-fill text-gold ms-2"></i></li>
+          </ul>
+        </div>
+        <div class="col-md-6 text-center">
+          <img src="assets/Lunch.png" alt="Lunch Selection" class="img-fluid float meal-img">
+        </div>
+      </div>
+
+      <!-- Dinner -->
+      <div class="row align-items-center meal-row mb-5">
+        <div class="col-md-6 meal-text">
+          <h2 class="brand-font text-gold display-4 mb-3">Dinner</h2>
+          <ul class="meal-highlights list-unstyled lead">
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Nasi Goreng</li>
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Mixed Grill Feasts</li>
+            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Samurai Tempura Prawns</li>
+          </ul>
+        </div>
+        <div class="col-md-6 text-center">
+          <img src="assets/Dinner.png" alt="Dinner Selection" class="img-fluid float meal-img">
+        </div>
+      </div>
+
     </div>
   </section>
+
+  <!-- Sticky CTA -->
+  <a href="https://wa.me/94773894604" class="sticky-order-cta" target="_blank">ORDER NOW</a>
 
   <!-- Footer -->
   <footer class="footer">
