@@ -288,4 +288,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 4. Infinite Carousel Marquee Logic
+  const carouselMarquee = document.getElementById('carouselMarquee');
+  if (carouselMarquee) {
+    // Duplicate the content to create a seamless loop
+    const carouselContent = carouselMarquee.innerHTML;
+    carouselMarquee.innerHTML += carouselContent;
+  }
+
+  // 5. Menu Gallery Fit-to-Screen Modal Logic
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImg');
+  const antigravityImgs = document.querySelectorAll('.antigravity-float');
+  
+  if (modal && modalImg) {
+    antigravityImgs.forEach(img => {
+      img.addEventListener('click', function() {
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+      });
+    });
+
+    // Close on click anywhere
+    modal.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+  }
+
 });
