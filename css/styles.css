@@ -636,12 +636,12 @@ h6,
 .carousel-marquee {
   display: inline-flex;
   align-items: center;
-  /* initial gap is 2rem. The JS duplicates this. */
   gap: 2rem;
-  /* Make sure there's padding on the right to match the gap so it loops perfectly */
-  padding-right: 2rem;
   animation: scrollMarquee 25s linear infinite;
   will-change: transform;
+  /* Add this: */
+  padding-right: 0;
+  margin-right: 0;
 }
 
 .carousel-marquee img {
@@ -649,6 +649,7 @@ h6,
   width: auto;
   border-radius: 12px;
   object-fit: cover;
+  flex-shrink: 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -659,7 +660,7 @@ h6,
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 
