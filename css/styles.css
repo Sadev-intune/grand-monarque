@@ -139,14 +139,26 @@ h6,
 /* Ethereal Transitions (Scroll Reveal) */
 .ethereal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateY(45px);
+  transition: opacity 0.9s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.9s cubic-bezier(0.215, 0.61, 0.355, 1);
   will-change: opacity, transform;
 }
 
 .ethereal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.ethereal.delay-100 {
+  transition-delay: 0.1s;
+}
+
+.ethereal.delay-200 {
+  transition-delay: 0.2s;
+}
+
+.ethereal.delay-300 {
+  transition-delay: 0.3s;
 }
 
 .delay-100 {
@@ -427,6 +439,67 @@ h6,
   color: #ff4d4d;
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.order-item-row {
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.order-item-select,
+.order-item-row .form-control {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.order-item-select option,
+.order-item-row .form-control option {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.order-item-row .form-control::placeholder,
+.order-item-row .form-select::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.glass-card .form-control,
+.glass-card .form-select {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.glass-card .form-control::placeholder,
+.glass-card .form-select::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.order-summary {
+  min-height: 100%;
+}
+
+.order-map {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#orderMap {
+  width: 100%;
+  min-height: 260px;
+}
+
+.order-summary .form-label {
+  color: var(--color-text);
+}
+
+.order-summary .form-control,
+.order-summary .form-select {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.order-summary .btn {
   letter-spacing: 1px;
 }
 
