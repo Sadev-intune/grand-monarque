@@ -263,6 +263,324 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 2b. Menu Order Builder (menu.html)
+  const orderItemsContainer = document.getElementById('orderItemsContainer');
+  const addOrderItemBtn = document.getElementById('addOrderItemBtn');
+  const clearOrderBtn = document.getElementById('clearOrderBtn');
+  const orderTotalEl = document.getElementById('orderTotal');
+  const submitOrderBtn = document.getElementById('submitOrderBtn');
+  const customerNameInput = document.getElementById('customerName');
+  const customerPhoneInput = document.getElementById('customerPhone');
+  const customerLocationInput = document.getElementById('customerLocation');
+
+  const menuItems = [
+    { name: 'Grilled Sourdough', price: 15.99 },
+    { name: 'Egg & Bacon Roll', price: 15.99 },
+    { name: 'Breakfast Burrito', price: 16.99 },
+    { name: 'Eggs Benedict', price: 17.99 },
+    { name: 'Big Breakfast', price: 29.99 },
+    { name: 'Sandwich', price: 11.99 },
+    { name: 'String Hoppers', price: 19.99 },
+    { name: 'Roast Bread', price: 19.99 },
+    { name: 'Coconut Roti', price: 5.99 },
+    { name: 'Samosas (3 PCS)', price: 8.49 },
+    { name: 'Onion Rings (8 PCS)', price: 12.99 },
+    { name: 'Spring Rolls (4 PCS)', price: 14.99 },
+    { name: 'Coco Prawns (5 PCS)', price: 11.99 },
+    { name: 'Regal Calamari (4 PCS)', price: 11.99 },
+    { name: 'Monarque Sharing Platter', price: 24.99 },
+    { name: 'Grand Buffalo Wings (5 PCS)', price: 8.99 },
+    { name: 'Arancini Di Monarque (5 PCS)', price: 9.99 },
+    { name: 'Prawn & Ginger Dumplings (4 PCS)', price: 24.99 },
+    { name: 'French Fries', price: 8.49 },
+    { name: 'Mash Bombs (5 PCS)', price: 8.49 },
+    { name: 'Chicken Nuggets (6 PCS)', price: 11.99 },
+    { name: 'Vegetable Only Rice & Curry', price: 14.99 },
+    { name: 'Chicken Rice & Curry', price: 15.99 },
+    { name: 'Beef Rice & Curry', price: 18.99 },
+    { name: 'Pork Rice & Curry', price: 17.99 },
+    { name: 'Firehawk Burger + Fries', price: 19.99 },
+    { name: 'Avo Wrap + Fries', price: 21.99 },
+    { name: 'Club Sandwich', price: 21.99 },
+    { name: 'Caesar Salad', price: 17.99 },
+    { name: 'Salmon Niçoise Salad', price: 22.99 },
+    { name: 'Garden Salad', price: 13.99 },
+    { name: 'Fish & Chips', price: 18.99 },
+    { name: 'Smokeshow Burger + Fries', price: 23.99 },
+    { name: 'Vegetable Fried Rice', price: 13.99 },
+    { name: 'Egg Fried Rice', price: 14.99 },
+    { name: 'Sausage Fried Rice', price: 16.99 },
+    { name: 'Chicken Fried Rice', price: 17.99 },
+    { name: 'Deviled Chicken Fried Rice', price: 18.99 },
+    { name: 'Seafood Fried Rice', price: 21.99 },
+    { name: 'Prawn Fried Rice', price: 20.99 },
+    { name: 'Nasi Goreng Chicken', price: 20.99 },
+    { name: 'Nasi Goreng Seafood', price: 23.99 },
+    { name: 'Meat Lovers’ Fried Rice', price: 28.99 },
+    { name: 'Pork Fried Rice', price: 19.99 },
+    { name: 'Grand Monarque Special Fried Rice', price: 34.99 },
+    { name: 'Vegetable Kottu (Medium)', price: 15.99 },
+    { name: 'Vegetable Kottu (Large)', price: 18.99 },
+    { name: 'Egg Kottu (Medium)', price: 16.99 },
+    { name: 'Egg Kottu (Large)', price: 19.99 },
+    { name: 'Roast Chicken Kottu (Medium)', price: 18.99 },
+    { name: 'Roast Chicken Kottu (Large)', price: 21.99 },
+    { name: 'Curry Chicken Kottu (Medium)', price: 18.99 },
+    { name: 'Curry Chicken Kottu (Large)', price: 21.99 },
+    { name: 'Pork Kottu (Medium)', price: 19.99 },
+    { name: 'Pork Kottu (Large)', price: 22.99 },
+    { name: 'Seafood Kottu (Medium)', price: 24.99 },
+    { name: 'Seafood Kottu (Large)', price: 27.99 },
+    { name: 'Nasi Goreng', price: 21.99 },
+    { name: 'Mongolian Rice', price: 24.99 },
+    { name: 'Singapore Noodles', price: 24.99 },
+    { name: 'Spaghetti & Meatballs', price: 20.99 },
+    { name: 'Mixed Grill Feast', price: 119.99 },
+    { name: 'Chicken Parmigiana + Fries', price: 23.99 },
+    { name: 'Garlic Grilled Prawns', price: 35.99 },
+    { name: 'Samurai Tempura Prawns', price: 32.99 },
+    { name: 'Ocean King Fish Feast', price: 35.99 },
+    { name: 'Seafood Grill Feast', price: 134.99 },
+    { name: 'Hot Butter Cuttlefish', price: 27.99 },
+    { name: 'Hot Butter Mushroom', price: 21.99 },
+    { name: 'Fried Chili Chicken', price: 23.99 },
+    { name: 'Deviled Chicken', price: 22.99 },
+    { name: 'Deviled Pork', price: 22.99 },
+    { name: 'Devilled Fish', price: 22.99 },
+    { name: 'Zesty Anchovy Fry', price: 19.99 },
+    { name: 'Kochchi Sausage Bite', price: 24.99 },
+    { name: 'Watalappan', price: 7.49 },
+    { name: 'Crème Caramel', price: 6.49 },
+    { name: 'Cheesecake', price: 9.99 },
+    { name: 'Hot Brownie', price: 7.99 },
+    { name: 'Ice Cream (Chocolate | Vanilla)', price: 4.99 }
+  ];
+
+  const priceMap = new Map(menuItems.map(item => [item.name, item.price]));
+
+  const formatCurrency = (value) => value.toFixed(2);
+
+  const updateOrderTotal = () => {
+    const rows = orderItemsContainer.querySelectorAll('.order-item-row');
+    const total = Array.from(rows).reduce((sum, row) => {
+      const price = parseFloat(row.querySelector('.order-item-price').value) || 0;
+      const qty = parseInt(row.querySelector('.order-item-qty').value, 10) || 0;
+      return sum + price * qty;
+    }, 0);
+    orderTotalEl.textContent = formatCurrency(total);
+  };
+
+  const createOrderRow = () => {
+    const row = document.createElement('div');
+    row.className = 'row g-3 align-items-end mb-3 order-item-row';
+
+    const itemCol = document.createElement('div');
+    itemCol.className = 'col-md-5';
+    const itemLabel = document.createElement('label');
+    itemLabel.className = 'form-label';
+    itemLabel.textContent = 'Food Item';
+    const itemSelect = document.createElement('select');
+    itemSelect.className = 'form-select order-item-select';
+    itemSelect.innerHTML = '<option value="">Select a food item</option>';
+    menuItems.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.name;
+      option.textContent = `${item.name}`;
+      itemSelect.appendChild(option);
+    });
+    itemCol.append(itemLabel, itemSelect);
+
+    const priceCol = document.createElement('div');
+    priceCol.className = 'col-md-3';
+    const priceLabel = document.createElement('label');
+    priceLabel.className = 'form-label';
+    priceLabel.textContent = 'Price per One';
+    const priceInput = document.createElement('input');
+    priceInput.type = 'text';
+    priceInput.className = 'form-control order-item-price';
+    priceInput.value = formatCurrency(0);
+    priceInput.readOnly = true;
+    priceCol.append(priceLabel, priceInput);
+
+    const qtyCol = document.createElement('div');
+    qtyCol.className = 'col-md-2';
+    const qtyLabel = document.createElement('label');
+    qtyLabel.className = 'form-label';
+    qtyLabel.textContent = 'Quantity';
+    const qtyInput = document.createElement('input');
+    qtyInput.type = 'number';
+    qtyInput.className = 'form-control order-item-qty';
+    qtyInput.min = '1';
+    qtyInput.value = '1';
+    qtyCol.append(qtyLabel, qtyInput);
+
+    const removeCol = document.createElement('div');
+    removeCol.className = 'col-md-2';
+    const removeLabel = document.createElement('label');
+    removeLabel.className = 'form-label text-transparent';
+    removeLabel.textContent = 'Remove';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn btn-outline-light w-100 remove-order-item';
+    removeBtn.textContent = 'Remove';
+    removeCol.append(removeLabel, removeBtn);
+
+    const updateRow = () => {
+      const unitPrice = priceMap.get(itemSelect.value) || 0;
+      priceInput.value = formatCurrency(unitPrice);
+      if (!qtyInput.value || parseInt(qtyInput.value, 10) < 1) {
+        qtyInput.value = '1';
+      }
+      updateOrderTotal();
+    };
+
+    itemSelect.addEventListener('change', updateRow);
+    qtyInput.addEventListener('input', () => {
+      if (!qtyInput.value || parseInt(qtyInput.value, 10) < 1) {
+        qtyInput.value = '1';
+      }
+      updateOrderTotal();
+    });
+
+    removeBtn.addEventListener('click', () => {
+      if (orderItemsContainer.children.length > 1) {
+        row.remove();
+      } else {
+        itemSelect.value = '';
+        priceInput.value = formatCurrency(0);
+        qtyInput.value = '1';
+      }
+      updateOrderTotal();
+    });
+
+    row.append(itemCol, priceCol, qtyCol, removeCol);
+    return row;
+  };
+
+  const resetOrder = () => {
+    orderItemsContainer.innerHTML = '';
+    orderItemsContainer.appendChild(createOrderRow());
+    orderTotalEl.textContent = formatCurrency(0);
+    if (customerNameInput) customerNameInput.value = '';
+    if (customerPhoneInput) customerPhoneInput.value = '';
+    if (customerLocationInput) customerLocationInput.value = '';
+  };
+
+  const buildOrderMessage = () => {
+    const rows = Array.from(orderItemsContainer.querySelectorAll('.order-item-row'));
+    const selectedItems = rows
+      .map(row => {
+        const itemName = row.querySelector('.order-item-select').value;
+        const itemPrice = parseFloat(row.querySelector('.order-item-price').value) || 0;
+        const qty = parseInt(row.querySelector('.order-item-qty').value, 10) || 0;
+        if (!itemName || qty < 1) return null;
+        return `${itemName} x ${qty} = ${formatCurrency(itemPrice * qty)}`;
+      })
+      .filter(Boolean);
+
+    if (selectedItems.length === 0) {
+      return null;
+    }
+
+    const total = orderTotalEl.textContent;
+    const customerName = customerNameInput ? customerNameInput.value.trim() : '';
+    const customerPhone = customerPhoneInput ? customerPhoneInput.value.trim() : '';
+    const customerLocation = customerLocationInput ? customerLocationInput.value.trim() : '';
+
+    let message = 'Order Request - The Grand Monarque\n\n';
+    if (customerName) message += `Name: ${customerName}\n`;
+    if (customerPhone) message += `Contact: ${customerPhone}\n`;
+    if (customerLocation) message += `Location: ${customerLocation}\n`;
+    message += `\nItems:\n${selectedItems.join('\n')}\n\nTotal: ${total}`;
+    return message;
+  };
+
+  if (orderItemsContainer) {
+    orderItemsContainer.appendChild(createOrderRow());
+  }
+
+  if (addOrderItemBtn) {
+    addOrderItemBtn.addEventListener('click', () => {
+      orderItemsContainer.appendChild(createOrderRow());
+      orderItemsContainer.lastElementChild.querySelector('.order-item-select').focus();
+    });
+  }
+
+  if (clearOrderBtn) {
+    clearOrderBtn.addEventListener('click', resetOrder);
+  }
+
+  if (submitOrderBtn) {
+    submitOrderBtn.addEventListener('click', () => {
+      const rawMessage = buildOrderMessage();
+      if (!rawMessage) {
+        alert('Please select at least one food item with quantity before ordering.');
+        return;
+      }
+      const whatsappURL = `https://wa.me/94773894604?text=${encodeURIComponent(rawMessage)}`;
+      window.open(whatsappURL, '_blank');
+    });
+  }
+
+  // 2c. Interactive Melbourne Map for location selection
+  const orderMapContainer = document.getElementById('orderMap');
+  if (orderMapContainer && window.L) {
+    const defaultCenter = [-37.8136, 144.9631];
+    const map = L.map(orderMapContainer).setView(defaultCenter, 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const marker = L.marker(defaultCenter, { draggable: true }).addTo(map);
+    marker.bindPopup('Drag the marker or click the map to choose a location.').openPopup();
+
+    const updateLocationFromCoords = async (latlng) => {
+      if (!customerLocationInput) return;
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data && data.display_name) {
+          customerLocationInput.value = data.display_name;
+        }
+      } catch (err) {
+        console.error('Reverse geocoding failed:', err);
+      }
+    };
+
+    map.on('click', function (event) {
+      marker.setLatLng(event.latlng);
+      map.setView(event.latlng, 15);
+      updateLocationFromCoords(event.latlng);
+    });
+
+    marker.on('dragend', function () {
+      const position = marker.getLatLng();
+      map.setView(position, 15);
+      updateLocationFromCoords(position);
+    });
+
+    if (window.L.Control && window.L.Control.Geocoder) {
+      const geocoder = L.Control.Geocoder.nominatim();
+      const geocoderControl = L.Control.geocoder({
+        geocoder,
+        defaultMarkGeocode: false,
+        placeholder: 'Search Melbourne address'
+      }).addTo(map);
+
+      geocoderControl.on('markgeocode', function (e) {
+        const center = e.geocode.center;
+        marker.setLatLng(center);
+        map.setView(center, 15);
+        if (customerLocationInput) {
+          customerLocationInput.value = e.geocode.html || e.geocode.name || '';
+        }
+      });
+    }
+  }
+
   // 3. Simple Password Gate for Dashboard (dashboard.html)
   const dashboardGate = document.getElementById('dashboardGate');
   const dashboardContent = document.getElementById('dashboardContent');
