@@ -13,6 +13,130 @@
   <link rel="stylesheet" href="css/styles.css">
   <meta name="description"
     content="The Grand Monarque - Experience high-end culinary excellence with our Antigravity theme.">
+
+  <style>
+    /* Hot Smoke Animation */
+    .hot-smoke {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .hot-smoke span {
+      position: absolute;
+      top: calc(45% + var(--y));
+      left: calc(50% + var(--x));
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 60%);
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0;
+      animation: smokeAnim 4s infinite ease-in-out;
+      animation-delay: var(--d);
+    }
+
+    @keyframes smokeAnim {
+      0% {
+        transform: translateY(0) scale(calc(var(--s) * 0.5));
+        opacity: 0;
+      }
+
+      30% {
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: translateY(-150px) scale(calc(var(--s) * 2.5));
+        opacity: 0;
+      }
+    }
+
+    /* Responsive Meal Images */
+    .meal-img {
+      width: 85%;
+      max-width: 320px;
+      height: auto;
+      margin: 1.5rem auto;
+      display: block;
+      transform-origin: center center;
+    }
+
+    /* Magical Floating Animation for Mobile (Smaller scale) */
+    @keyframes magicalFloat {
+      0% {
+        transform: translateY(0px) scale(1.05);
+        filter: drop-shadow(0 10px 15px rgba(201, 162, 78, 0.3)) brightness(1.1) contrast(1.1);
+      }
+
+      50% {
+        transform: translateY(-15px) scale(1.08);
+        filter: drop-shadow(0 20px 25px rgba(201, 162, 78, 0.5)) brightness(1.15) contrast(1.2);
+      }
+
+      100% {
+        transform: translateY(0px) scale(1.05);
+        filter: drop-shadow(0 10px 15px rgba(201, 162, 78, 0.3)) brightness(1.1) contrast(1.1);
+      }
+    }
+
+    /* Desktop Styles & Animations */
+    @media (min-width: 768px) {
+      .meal-img {
+        width: 85%;
+        max-width: 550px;
+        margin: 0 auto;
+      }
+
+      .hot-smoke span {
+        width: 120px;
+        height: 120px;
+        filter: blur(15px);
+      }
+
+      @keyframes smokeAnim {
+        0% {
+          transform: translateY(0) scale(calc(var(--s) * 0.5));
+          opacity: 0;
+        }
+
+        30% {
+          opacity: 0.9;
+        }
+
+        100% {
+          transform: translateY(-200px) scale(calc(var(--s) * 2.5));
+          opacity: 0;
+        }
+      }
+
+      @keyframes magicalFloat {
+        0% {
+          transform: translateY(0px) scale(1.05);
+          filter: drop-shadow(0 15px 25px rgba(201, 162, 78, 0.4)) brightness(1.1) contrast(1.2);
+        }
+
+        50% {
+          transform: translateY(-20px) scale(1.08);
+          filter: drop-shadow(0 30px 40px rgba(201, 162, 78, 0.6)) brightness(1.2) contrast(1.3);
+        }
+
+        100% {
+          transform: translateY(0px) scale(1.05);
+          filter: drop-shadow(0 15px 25px rgba(201, 162, 78, 0.4)) brightness(1.1) contrast(1.2);
+        }
+      }
+    }
+
+    .magical-float {
+      animation: magicalFloat 5s ease-in-out infinite;
+      will-change: transform, filter;
+    }
+  </style>
 </head>
 
 <body>
@@ -63,53 +187,91 @@
       <img src="assets/carsoul5.jpeg" alt="Carousel Image 5">
     </div>
   </div>
-
   <!-- Antigravity Meal Sections -->
-  <section class="antigravity-meals-section py-5">
-    <div class="container">
+  <section class="antigravity-meals-section py-3" style="background: transparent;">
+    <div class="container px-4">
 
       <!-- Breakfast -->
-      <div class="row align-items-center meal-row mb-5">
-        <div class="col-md-6 meal-text ag-reveal" data-side="right">
-          <h2 class="brand-font text-gold display-4 mb-3">Breakfast</h2>
-          <ul class="meal-highlights list-unstyled lead">
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Grilled Sourdough</li>
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Breakfast Burritos</li>
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Sri Lankan Roast Bread with Dahl</li>
+      <div class="row align-items-center meal-row mb-0 g-0" style="background: transparent;">
+        <div class="col-md-5 meal-text ps-md-5 ag-reveal" data-side="left">
+          <h2 class="brand-font text-gold mb-2" style="font-size: 3.5rem;">Breakfast</h2>
+          <ul class="meal-highlights list-unstyled" style="font-size: 1.25rem;">
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Grilled Sourdough</li>
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Breakfast Burritos</li>
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Sri Lankan Roast Bread with Dahl</li>
           </ul>
         </div>
-        <div class="col-md-6 text-center ag-reveal" data-side="left">
-          <img src="assets/Breakfast.png" alt="Breakfast Selection" class="img-fluid float meal-img">
+        <div class="col-md-7 text-center position-relative" style="background: transparent;">
+          <!-- Hot Smoke Effect -->
+          <div class="hot-smoke">
+            <span style="--d:0.0s; --x:-80px; --y: 10px; --s: 1.2;"></span>
+            <span style="--d:0.4s; --x: 40px; --y:-30px; --s: 1.0;"></span>
+            <span style="--d:0.8s; --x:-30px; --y: 30px; --s: 1.5;"></span>
+            <span style="--d:1.2s; --x: 70px; --y: 10px; --s: 1.1;"></span>
+            <span style="--d:1.6s; --x:-100px; --y:-10px; --s: 1.3;"></span>
+            <span style="--d:2.0s; --x: 10px; --y: 40px; --s: 1.4;"></span>
+            <span style="--d:2.4s; --x: 90px; --y:-20px; --s: 1.2;"></span>
+            <span style="--d:2.8s; --x:-50px; --y:-40px; --s: 1.0;"></span>
+            <span style="--d:3.2s; --x: 50px; --y: 50px; --s: 1.3;"></span>
+            <span style="--d:3.6s; --x:-10px; --y:-20px; --s: 1.6;"></span>
+          </div>
+          <img src="assets/Breakfast.png" alt="Breakfast Plate" class="magical-float meal-img">
         </div>
       </div>
 
       <!-- Lunch -->
-      <div class="row align-items-center meal-row mb-5 flex-md-row-reverse">
-        <div class="col-md-6 meal-text text-md-start text-lg-end ag-reveal" data-side="right">
-          <h2 class="brand-font text-gold display-4 mb-3">Lunch</h2>
-          <ul class="meal-highlights list-unstyled lead">
-            <li class="mb-2">Smokeshow Burgers<i class="bi bi-star-fill text-gold ms-2"></i></li>
-            <li class="mb-2">Firehawk Chicken<i class="bi bi-star-fill text-gold ms-2"></i></li>
-            <li class="mb-2">Fresh Salmon Niçoise Salad<i class="bi bi-star-fill text-gold ms-2"></i></li>
+      <div class="row align-items-center meal-row mb-0 flex-md-row-reverse g-0" style="background: transparent;">
+        <div class="col-md-5 meal-text text-md-start text-lg-end pe-md-5 ag-reveal" data-side="right">
+          <h2 class="brand-font text-gold mb-2" style="font-size: 3.5rem;">Lunch</h2>
+          <ul class="meal-highlights list-unstyled" style="font-size: 1.25rem;">
+            <li class="mb-1">Smokeshow Burgers<i class="bi bi-star-fill text-gold ms-2"></i></li>
+            <li class="mb-1">Firehawk Chicken<i class="bi bi-star-fill text-gold ms-2"></i></li>
+            <li class="mb-1">Fresh Salmon Niçoise Salad<i class="bi bi-star-fill text-gold ms-2"></i></li>
           </ul>
         </div>
-        <div class="col-md-6 text-center ag-reveal" data-side="left">
-          <img src="assets/Lunch.png" alt="Lunch Selection" class="img-fluid float meal-img ">
+        <div class="col-md-7 text-center position-relative" style="background: transparent;">
+          <!-- Hot Smoke Effect -->
+          <div class="hot-smoke">
+            <span style="--d:0.0s; --x:-80px; --y: 10px; --s: 1.2;"></span>
+            <span style="--d:0.4s; --x: 40px; --y:-30px; --s: 1.0;"></span>
+            <span style="--d:0.8s; --x:-30px; --y: 30px; --s: 1.5;"></span>
+            <span style="--d:1.2s; --x: 70px; --y: 10px; --s: 1.1;"></span>
+            <span style="--d:1.6s; --x:-100px; --y:-10px; --s: 1.3;"></span>
+            <span style="--d:2.0s; --x: 10px; --y: 40px; --s: 1.4;"></span>
+            <span style="--d:2.4s; --x: 90px; --y:-20px; --s: 1.2;"></span>
+            <span style="--d:2.8s; --x:-50px; --y:-40px; --s: 1.0;"></span>
+            <span style="--d:3.2s; --x: 50px; --y: 50px; --s: 1.3;"></span>
+            <span style="--d:3.6s; --x:-10px; --y:-20px; --s: 1.6;"></span>
+          </div>
+          <img src="assets/Lunch.png" alt="Lunch Plate" class="magical-float meal-img">
         </div>
       </div>
 
       <!-- Dinner -->
-      <div class="row align-items-center meal-row mb-5">
-        <div class="col-md-6 meal-text ag-reveal" data-side="left">
-          <h2 class="brand-font text-gold display-4 mb-3">Dinner</h2>
-          <ul class="meal-highlights list-unstyled lead">
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Nasi Goreng</li>
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Mixed Grill Feasts</li>
-            <li class="mb-2"><i class="bi bi-star-fill text-gold me-2"></i>Samurai Tempura Prawns</li>
+      <div class="row align-items-center meal-row mb-0 g-0" style="background: transparent;">
+        <div class="col-md-5 meal-text ps-md-5 ag-reveal" data-side="left ">
+          <h2 class="brand-font text-gold mb-2" style="font-size: 3.5rem;">Dinner</h2>
+          <ul class="meal-highlights list-unstyled" style="font-size: 1.25rem;">
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Nasi Goreng</li>
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Mixed Grill Feasts</li>
+            <li class="mb-1"><i class="bi bi-star-fill text-gold me-2"></i>Samurai Tempura Prawns</li>
           </ul>
         </div>
-        <div class="col-md-6 text-center ag-reveal" data-side="right">
-          <img src="assets/Dinner.png" alt="Dinner Selection" class="img-fluid float meal-img">
+        <div class="col-md-7 text-center position-relative" style="background: transparent;">
+          <!-- Hot Smoke Effect -->
+          <div class="hot-smoke">
+            <span style="--d:0.0s; --x:-80px; --y: 10px; --s: 1.2;"></span>
+            <span style="--d:0.4s; --x: 40px; --y:-30px; --s: 1.0;"></span>
+            <span style="--d:0.8s; --x:-30px; --y: 30px; --s: 1.5;"></span>
+            <span style="--d:1.2s; --x: 70px; --y: 10px; --s: 1.1;"></span>
+            <span style="--d:1.6s; --x:-100px; --y:-10px; --s: 1.3;"></span>
+            <span style="--d:2.0s; --x: 10px; --y: 40px; --s: 1.4;"></span>
+            <span style="--d:2.4s; --x: 90px; --y:-20px; --s: 1.2;"></span>
+            <span style="--d:2.8s; --x:-50px; --y:-40px; --s: 1.0;"></span>
+            <span style="--d:3.2s; --x: 50px; --y: 50px; --s: 1.3;"></span>
+            <span style="--d:3.6s; --x:-10px; --y:-20px; --s: 1.6;"></span>
+          </div>
+          <img src="assets/Dinner.png" alt="Dinner Plate" class="magical-float meal-img">
         </div>
       </div>
 
