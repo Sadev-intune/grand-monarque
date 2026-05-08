@@ -771,7 +771,6 @@ h6,
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Video Container & Transparency Handling */
 .video-wrapper {
   position: relative;
   width: 100%;
@@ -780,19 +779,53 @@ h6,
   overflow: hidden;
   background: transparent;
   border-radius: 8px;
-  /* Watermark crop: overflow:hidden clips the zoomed video */
   margin: 0 auto;
 }
 
-/* Video element - Watermark cropping via clip-path only */
-.meal-video {
-  display: block;
+.video-wrapper video,
+.meal-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
-  /* Clip-path removes only bottom-right corner (watermark area) without distortion */
-  clip-path: polygon(0 0, 100% 0, 100% 92%, 92% 92%, 92% 100%, 0 100%);
+  background: transparent;
+  
+  /* Remove black background on mobile */
+  mix-blend-mode: screen;
+  
+  /* Mobile fallback */
+  -webkit-mix-blend-mode: screen;
+}
+
+/* Mobile fix — blend mode often breaks on iOS/Android */
+@media (max-width: 768px) {
+  .video-wrapper video,
+  .meal-img {
+    mix-blend-mode: normal;
+    -webkit-mix-blend-mode: normal;
+    
+    /* Use chroma-key style filter to kill black background */
+    filter: brightness(1.1) contrast(1.2) saturate(1.3);
+    
+    /* This removes the dark bg on mobile without blend mode */
+    background-color: transparent !important;
+    background: transparent !important;
+    isolation: auto;
+  }
+
+  .video-wrapper {
+    background: transparent !important;
+    background-color: transparent !important;
+    mix-blend-mode: normal;
+    isolation: auto;
+  }
+}
+/* Video element - Watermark cropping via scale & positioning */
+.meal-video {
+  display: block;
+  width: 115%;
+  height: auto;
+  /* Transform scale and positioning to push watermark out of view */
+  transform: translate(-7.5%, 0) scale(1);
   /* Transparency handling for both desktop and mobile */
   mix-blend-mode: screen;
   background: transparent;
