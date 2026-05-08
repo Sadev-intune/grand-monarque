@@ -36,33 +36,33 @@
   </nav>
 
   <!-- Catering Header (Hero) -->
-  <header class="hero-catering ethereal text-center">
+  <header class="hero-catering text-center">
     <div class="container">
-      <h1 class="brand-font display-3 mb-3 text-gold">Catering & Private Events</h1>
+      <h1 class="brand-font display-3  text-gold">Catering & Private Events</h1>
       <p class="lead text-light" style="max-width: 600px; margin: 0 auto;">Bespoke catering services bringing The Grand
         Monarque's signature antigravity dining experience directly to your guests.</p>
     </div>
   </header>
 
   <!-- Services Section -->
-  <section class="py-5 my-5">
+  <section class="py-2 my-2">
     <div class="container">
       <div class="row g-5">
-        <div class="col-md-4 ethereal delay-100">
+        <div class="col-md-4 ethereal delay-100 visible">
           <div class="glass-card p-4 h-100 text-center">
             <h3 class="menu-item-name mb-3">Private Dining</h3>
             <p class="menu-item-desc">Intimate, curated culinary experiences in the comfort of your own space. Perfect
               for anniversaries and exclusive gatherings.</p>
           </div>
         </div>
-        <div class="col-md-4 ethereal delay-200">
+        <div class="col-md-4 ethereal delay-100 visible">
           <div class="glass-card p-4 h-100 text-center">
             <h3 class="menu-item-name mb-3">Corporate Catering</h3>
             <p class="menu-item-desc">Impress clients and partners with a high-end showcase. From elegantly plated
               courses to our interactive buffet stations.</p>
           </div>
         </div>
-        <div class="col-md-4 ethereal delay-300">
+        <div class="col-md-4 ethereal delay-100 visible">
           <div class="glass-card p-4 h-100 text-center">
             <h3 class="menu-item-name mb-3">Event Hosting</h3>
             <p class="menu-item-desc">Weddings and milestones deserve an unforgettable menu. Work with our chef to
@@ -73,58 +73,68 @@
     </div>
   </section>
 
-  <!-- Gallery Section -->
-  <section class="py-5 my-5 bg-dark" style="background-color: rgba(10,10,10,0.5) !important;">
-    <div class="container">
-      <h2 class="menu-category-title ethereal">Event Gallery</h2>
-      <div class="row g-4 mt-4">
-        <div class="col-md-6 ethereal delay-100">
-          <div class="glass-card text-center p-2">
-            <img src="assets/event1.jpeg" alt="Corporate Luxury Dining" class="weightless img-fluid rounded mb-0">
-          </div>
+<!-- Gallery Section -->
+<section class="gallery-section py-5 my-5">
+  <div class="container">
+    <h2 class="menu-category-title">Event Gallery</h2>
+    <div class="row g-4 mt-4">
+      <div class="col-md-6 ag-reveal" data-side="left">
+        <div class="glass-card text-center p-2">
+          <img src="assets/event1.jpeg" alt="Corporate Luxury Dining" class="gallery-img img-fluid rounded">
         </div>
-        <div class="col-md-6 ethereal delay-200">
-          <div class="glass-card text-center p-2">
-            <img src="assets/event2.jpeg" alt="Private Celebration Dinner"
-              class="weightless weightless-delay-1 img-fluid rounded mb-0">
-          </div>
+      </div>
+      <div class="col-md-6 ag-reveal" data-side="right">
+        <div class="glass-card text-center p-2">
+          <img src="assets/event2.jpeg" alt="Private Celebration Dinner" class="gallery-img img-fluid rounded">
         </div>
-        <div class="col-md-6 ethereal delay-300">
-          <div class="glass-card text-center p-2">
-            <img src="assets/event3.jpeg" alt="Luxury Food Station"
-              class="weightless weightless-delay-2 img-fluid rounded mb-0">
-          </div>
+      </div>
+      <div class="col-md-6 ag-reveal" data-side="left">
+        <div class="glass-card text-center p-2">
+          <img src="assets/event3.jpeg" alt="Luxury Food Station" class="gallery-img img-fluid rounded">
         </div>
-        <div class="col-md-6 ethereal delay-100">
-          <div class="glass-card text-center p-2">
-            <img src="assets/event4.jpeg" alt="Gourmet Cocktail Reception"
-              class="weightless weightless-delay-3 img-fluid rounded mb-0">
-          </div>
+      </div>
+      <div class="col-md-6 ag-reveal" data-side="right">
+        <div class="glass-card text-center p-2">
+          <img src="assets/event4.jpeg" alt="Gourmet Cocktail Reception" class="gallery-img img-fluid rounded">
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Food Highlights & CTA -->
-  <section class="py-5 my-5 text-center">
-    <div class="container ethereal">
-      <h2 class="brand-font text-gold mb-4">The Culinary Experience</h2>
-      <div class="row justify-content-center mb-5">
-        <div class="col-md-8">
-          <p class="lead text-light mb-4">Our catering menus are built around our signature fusion dishes and curated
-            fine dining experiences. We blend bold flavors with breathtaking presentation, ensuring every bite is a
-            statement.</p>
-          <p class="text-light">From interactive live stations to multi-course tasting menus, we tailor every aspect to
-            match your vision.</p>
-        </div>
-      </div>
-      <a href="contact.html" class="btn btn-gold weightless" style="animation-delay: -2s;">Make an Inquiry</a>
-    </div>
-  </section>
+<section class="py-5 my-5 text-center">
+  <div class="container">
 
+    <h2 class="brand-font text-gold mb-4 ag-reveal" data-side="left">
+      The Culinary Experience
+    </h2>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8">
+        <p class="lead text-light mb-4 ag-reveal" data-side="left" style="transition-delay: 0.15s;">
+          Our catering menus are built around our signature fusion dishes and curated
+          fine dining experiences. We blend bold flavors with breathtaking presentation,
+          ensuring every bite is a statement.
+        </p>
+        <p class="text-light ag-reveal" data-side="right" style="transition-delay: 0.3s;">
+          From interactive live stations to multi-course tasting menus, we tailor every
+          aspect to match your vision.
+        </p>
+      </div>
+    </div>
+
+    <div class="ag-reveal" data-side="right" style="transition-delay: 0.45s;">
+      <a href="contact.html" class="btn btn-gold weightless" style="animation-delay: -2s;">
+        Make an Inquiry
+      </a>
+    </div>
+
+  </div>
+</section>
   <!-- Footer -->
   <footer class="footer">
-    <div class="container ethereal">
+    <div class="container">
       <div class="row g-4 text-center text-md-start">
         <div class="col-md-4">
           <img src="assets/LOGO.png" alt="The Grand Monarque" class="footer-logo mb-3" style="max-width: 120px;">
