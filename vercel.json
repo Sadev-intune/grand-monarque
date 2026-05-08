@@ -1,9 +1,15 @@
 {
   "rewrites": [
-    { "source": "/menu", "destination": "/menu.html" },
-    { "source": "/catering", "destination": "/catering.html" },
-    { "source": "/reserve", "destination": "/reserve.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/$1.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path(.+)\\.html",
+      "destination": "/:path",
+      "permanent": true
+    }
   ]
 }
