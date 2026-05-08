@@ -32,7 +32,7 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../assets/background.jpeg');
+  background-image: url('../assets/Background.jpeg');
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
