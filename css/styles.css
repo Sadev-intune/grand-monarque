@@ -743,17 +743,8 @@ h6,
 
 /* 4. Antigravity Meal Sections */
 .antigravity-meals-section {
-  padding-top: 5rem;
-  padding-bottom: 8rem;
-}
-
-.meal-row {
-  margin-bottom: 2rem;
-}
-
-.meal-img {
-  max-width: 90%;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
+  padding-top: 3rem;
+  padding-bottom: 5rem;
 }
 
 @keyframes floatY {
@@ -780,6 +771,207 @@ h6,
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Video Container & Transparency Handling */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 8px;
+  /* Watermark crop: overflow:hidden clips the zoomed video */
+  margin: 0 auto;
+}
+
+/* Video element - Watermark cropping via clip-path only */
+.meal-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  /* Clip-path removes only bottom-right corner (watermark area) without distortion */
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 92% 92%, 92% 100%, 0 100%);
+  /* Transparency handling for both desktop and mobile */
+  mix-blend-mode: screen;
+  background: transparent;
+  isolation: isolate;
+  /* Mask-image for advanced transparency on mobile */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.3) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.3) 100%);
+  /* Drop shadow for visual pop */
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7)) drop-shadow(0 10px 20px rgba(197, 160, 89, 0.2));
+}
+
+/* Meal Section Layout - Desktop Flex Layout */
+.meal-row {
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.meal-content {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Reverse layout for Lunch section */
+.meal-content.meal-reverse {
+  flex-direction: row-reverse;
+}
+
+.meal-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Responsive Meal Title */
+.meal-title {
+  font-size: 3.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.meal-highlights {
+  font-size: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meal-highlights li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile: Stack layout */
+@media (max-width: 768px) {
+  .meal-row {
+    margin-bottom: 2.5rem;
+    flex-direction: column;
+  }
+
+  .meal-content,
+  .meal-content.meal-reverse {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .meal-text {
+    text-align: center;
+    width: 100%;
+  }
+
+  .video-wrapper {
+    max-width: 80vw;
+    width: 100%;
+    margin: 1rem auto 0;
+  }
+
+  .meal-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .meal-highlights {
+    font-size: 1rem;
+    align-items: center;
+  }
+
+  .meal-highlights li {
+    padding: 0.75rem 0;
+  }
+
+  .antigravity-meals-section {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Tablet: Adjusted spacing */
+@media (max-width: 768px) and (min-width: 481px) {
+  .meal-row {
+    margin-bottom: 2.5rem;
+  }
+
+  .video-wrapper {
+    max-width: 75vw;
+  }
+
+  .meal-title {
+    font-size: 2.8rem;
+  }
+}
+
+/* Small Mobile: Extra optimizations */
+@media (max-width: 480px) {
+  .meal-title {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .meal-highlights {
+    font-size: 0.95rem;
+  }
+
+  .meal-highlights li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .video-wrapper {
+    max-width: 85vw;
+    margin-top: 0.5rem;
+  }
+
+  .meal-video {
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 5px 10px rgba(197, 160, 89, 0.15));
+  }
+}
+
+/* Desktop: Ensure proper sizing */
+@media (min-width: 769px) {
+  .video-wrapper {
+    max-width: 400px;
+    flex-shrink: 0;
+  }
+
+  .meal-content {
+    gap: 4rem;
+  }
+
+  .meal-text {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .meal-video {
+    filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.8)) drop-shadow(0 12px 25px rgba(197, 160, 89, 0.25));
+  }
+}
+
+/* Video Container & Transparency Handling */
+.video-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
 /* 5. Sticky CTA */
 .sticky-order-cta {
   position: fixed;
@@ -804,4 +996,23 @@ h6,
   transform: translateX(-50%) translateY(-5px);
   box-shadow: 0 15px 35px rgba(201, 162, 78, 0.6);
   color: #000;
+}
+
+/* Mobile: Thumb-friendly CTA Button */
+@media (max-width: 768px) {
+  .sticky-order-cta {
+    padding: 0.75rem 2rem;
+    font-size: 0.85rem;
+    bottom: 20px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-order-cta {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.75rem;
+    bottom: 15px;
+    border-radius: 25px;
+  }
 }
