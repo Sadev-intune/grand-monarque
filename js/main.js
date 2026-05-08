@@ -1,61 +1,326 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Ethereal Transitions (Intersection Observer)
-  const etherealElements = document.querySelectorAll('.ethereal');
+  // Antigravity Scroll Animation System
+  const targetSelectors = ['img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div'];
+  const antigravityElements = [];
 
-  if (etherealElements.length > 0) {
-    const observerOptions = {
+  targetSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(el => {
+      // Skip if already has reveal class, is inside nav/footer/carousel, or is empty div
+      if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-center') &&
+          !el.closest('nav') && !el.closest('footer') && !el.closest('#carouselMarquee') &&
+          (selector !== 'div' || el.textContent.trim() !== '')) {
+        antigravityElements.push(el);
+      }
+    });
+  });
+
+  // Assign directional classes based on position
+  antigravityElements.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const centerX = window.innerWidth / 2;
+    const elCenterX = rect.left + rect.width / 2;
+    const threshold = 100; // pixels from center to consider centered
+
+    if (Math.abs(elCenterX - centerX) < threshold) {
+      el.classList.add('reveal-center');
+    } else if (elCenterX < centerX) {
+      el.classList.add('reveal-left');
+    } else {
+      el.classList.add('reveal-right');
+    }
+  });
+
+  // Intersection Observer for reveal
+  let staggerIndex = 0;
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+
+  const antigravityObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Stagger the reveal
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+          // Add floating after transition
+          entry.target.addEventListener('transitionend', () => {
+            entry.target.classList.add('floating');
+          }, { once: true });
+        }, staggerIndex * 100);
+        staggerIndex++;
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  antigravityElements.forEach(el => {
+    antigravityObserver.observe(el);
+  });
+
+  // 2. Scroll-to-Reveal Animation (Intersection Observer)
+  const revealElements = document.querySelectorAll('.reveal-left, .reveal-right');
+
+  if (revealElements.length > 0) {
+    const revealObserverOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.15
+      threshold: 0.1
     };
 
-    const etherealObserver = new IntersectionObserver((entries, observer) => {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          entry.target.classList.add('active');
           observer.unobserve(entry.target); // Only animate once
         }
       });
-    }, observerOptions);
+    }, revealObserverOptions);
 
-    etherealElements.forEach(el => {
-      etherealObserver.observe(el);
+    revealElements.forEach(el => {
+      revealObserver.observe(el);
     });
   }
 
+  // 3. Reservation System Logic (reserve.html)
   // 2. Reservation System Logic (reserve.html)
   const bookingForm = document.getElementById('bookingForm');
   if (bookingForm) {
+    const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxQqSXgauAGwkUjeDpuVeEuC8upS9sCoaP-jlgzslNuQenDOo02UbChcigSALQ77Hrq/exec';
+
     const dateInput = document.getElementById('date');
     const timeInInput = document.getElementById('timeIn');
     const timeOutInput = document.getElementById('timeOut');
+    const tableContainer = document.getElementById('tableSelectionContainer');
+    const tableGrid = document.getElementById('tableGrid');
+    const tableLoading = document.getElementById('tableLoading');
+    const checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
     const submitBookingBtn = document.getElementById('submitBookingBtn');
+    const selectedTableInput = document.getElementById('selectedTable');
 
-    bookingForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+    // Add success/error message container to the UI
+    const statusMsg = document.createElement('div');
+    statusMsg.className = 'alert mt-4 text-center';
+    statusMsg.style.display = 'none';
+    bookingForm.appendChild(statusMsg);
 
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('contact').value.trim();
-      const selectedDate = dateInput.value;
-      const selectedTimeIn = timeInInput.value;
-      const selectedTimeOut = timeOutInput.value;
-      const guests = document.getElementById('guests').value;
+    let allBookings = [];
 
-      if (!name || !phone || !selectedDate || !selectedTimeIn || !selectedTimeOut || !guests) {
-        alert('Please complete all reservation fields.');
+    const fetchBookings = async () => {
+      try {
+        const response = await fetch(GOOGLE_SHEET_API_URL);
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        return [];
+      }
+    };
+
+    const performAvailabilityCheck = async () => {
+      const dateVal = dateInput.value;
+      const timeInVal = timeInInput.value;
+      const timeOutVal = timeOutInput.value;
+
+      if (!dateVal || !timeInVal || !timeOutVal) {
+        alert("Please select a date, time in, and time out first.");
         return;
       }
 
-      submitBookingBtn.textContent = 'Opening WhatsApp...';
-      submitBookingBtn.disabled = true;
+      tableContainer.style.display = 'block';
+      tableLoading.style.display = 'inline-block';
+      tableGrid.innerHTML = '';
+      selectedTableInput.value = '';
+      submitBookingBtn.style.display = 'none';
+      statusMsg.style.display = 'none';
 
-      const message = `Reservation Request - The Grand Monarque\n\nName: ${name}\nContact: ${phone}\nDate: ${selectedDate}\nTime: ${selectedTimeIn} - ${selectedTimeOut}\nGuests: ${guests}`;
-      const whatsappURL = `https://wa.me/94773894604?text=${encodeURIComponent(message)}`;
-      window.open(whatsappURL, '_blank');
-      bookingForm.reset();
-      submitBookingBtn.textContent = 'Confirm & Book via WhatsApp';
-      submitBookingBtn.disabled = false;
+      allBookings = await fetchBookings();
+
+      const newStartParts = timeInVal.split(':');
+      const newStartMins = parseInt(newStartParts[0]) * 60 + parseInt(newStartParts[1]);
+
+      const newEndParts = timeOutVal.split(':');
+      const newEndMins = parseInt(newEndParts[0]) * 60 + parseInt(newEndParts[1]);
+
+      if (newEndMins <= newStartMins) {
+        alert("Time Out must be after Time In.");
+        tableLoading.style.display = 'none';
+        tableContainer.style.display = 'none';
+        return;
+      }
+
+      const occupiedTables = new Set();
+
+      const normalizeDate = (dStr) => {
+        if (!dStr) return "";
+        const d = new Date(dStr);
+        if (!isNaN(d.getTime())) {
+          const yyyy = d.getFullYear();
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const dd = String(d.getDate()).padStart(2, '0');
+          return `${yyyy}-${mm}-${dd}`;
+        }
+        return dStr.toString().trim();
+      };
+
+      allBookings.forEach(booking => {
+        const existingDateRaw = booking.Date || booking.date;
+        const normalizedExistingDate = normalizeDate(existingDateRaw);
+
+        if (normalizedExistingDate === dateVal) {
+          const existingTimeInStr = booking["Time In"] || booking.timeIn || booking.time_in || "";
+          const existingTimeOutStr = booking["Time Out"] || booking.timeOut || booking.time_out || "";
+
+          if (existingTimeInStr && existingTimeOutStr) {
+            // Parses both HH:MM and Google Sheet's ISO Time Strings safely
+            const extractMins = (tStr) => {
+              let cleanTime = tStr.toString().trim();
+              if (cleanTime.includes('T')) {
+                const d = new Date(cleanTime);
+                return d.getHours() * 60 + d.getMinutes();
+              } else {
+                let parts = cleanTime.split(':');
+                if (parts.length < 2) return 0;
+                let h = parseInt(parts[0], 10);
+                let m = parseInt(parts[1], 10);
+                return (isNaN(h) ? 0 : h) * 60 + (isNaN(m) ? 0 : m);
+              }
+            };
+
+            const existingStartMins = extractMins(existingTimeInStr);
+            const existingEndMins = extractMins(existingTimeOutStr);
+
+            // STRICT Overlap Rule: newStart < existingEnd AND newEnd > existingStart
+            if (newStartMins < existingEndMins && newEndMins > existingStartMins) {
+              const tableNo = parseInt(booking["Table No"] || booking.tableNo || booking.table_no, 10);
+              if (!isNaN(tableNo)) occupiedTables.add(tableNo);
+            }
+          }
+        }
+      });
+
+      let availableCount = 0;
+      for (let i = 1; i <= 10; i++) {
+        // ONLY DISPLAY AVAILABLE TABLES
+        if (!occupiedTables.has(i)) {
+          availableCount++;
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'table-btn';
+          btn.textContent = `Table ${i}`;
+
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedTableInput.value = i;
+            submitBookingBtn.style.display = 'block';
+          });
+
+          tableGrid.appendChild(btn);
+        }
+      }
+
+      if (availableCount === 0) {
+        tableGrid.innerHTML = '<p class="text-light">No tables available for this time slot. Please select a different time.</p>';
+      }
+
+      tableLoading.style.display = 'none';
+      checkAvailabilityBtn.style.display = 'none';
+    };
+
+    if (checkAvailabilityBtn) {
+      checkAvailabilityBtn.addEventListener('click', performAvailabilityCheck);
+    }
+
+    const resetAvailability = () => {
+      if (tableContainer) tableContainer.style.display = 'none';
+      if (submitBookingBtn) submitBookingBtn.style.display = 'none';
+      if (checkAvailabilityBtn) checkAvailabilityBtn.style.display = 'block';
+      if (selectedTableInput) selectedTableInput.value = '';
+    };
+
+    if (dateInput) dateInput.addEventListener('change', resetAvailability);
+    if (timeInInput) timeInInput.addEventListener('change', resetAvailability);
+    if (timeOutInput) timeOutInput.addEventListener('change', resetAvailability);
+
+    bookingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('contact').value;
+      const selectedDate = document.getElementById('date').value;
+      const selectedTimeIn = document.getElementById('timeIn').value;
+      const selectedTimeOut = document.getElementById('timeOut').value;
+      const selectedTable = selectedTableInput.value;
+
+      if (!selectedTable) {
+        alert("Please select an available table.");
+        return;
+      }
+
+      submitBookingBtn.textContent = 'Processing...';
+      submitBookingBtn.disabled = true;
+      statusMsg.style.display = 'none';
+
+      try {
+        // Send data to Google Sheets (Server-side validation FIRST)
+        const response = await fetch(GOOGLE_SHEET_API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            date: selectedDate,
+            timeIn: selectedTimeIn,
+            timeOut: selectedTimeOut,
+            tableNo: selectedTable,
+            customerName: name,
+            contactNo: phone
+          })
+        });
+
+        // STRICT Server Authority: Must read actual JSON response from backend
+        let result = await response.json();
+
+        if (result.status === "error") {
+          // Table is already booked (server-side validation failed)
+          statusMsg.className = 'alert alert-danger mt-4 text-center';
+          statusMsg.innerHTML = `<strong>Error:</strong> ${result.message || "Selected table is not available for this time slot."}`;
+          statusMsg.style.display = 'block';
+
+          // Re-fetch available tables automatically
+          await performAvailabilityCheck();
+        } else if (result.status === "success") {
+          // Backend confirmed save -> Trigger WhatsApp
+          const message = `Reservation Request - The Grand Monarque\n\nName: ${name}\nContact: ${phone}\nDate: ${selectedDate}\nTime: ${selectedTimeIn} - ${selectedTimeOut}\nTable: ${selectedTable}`;
+          const whatsappURL = `https://wa.me/94773894604?text=${encodeURIComponent(message)}`;
+          window.open(whatsappURL, "_blank");
+
+          // Update UI immediately (remove selected table, reset form)
+          document.querySelectorAll('.table-btn.selected').forEach(btn => btn.remove());
+          bookingForm.reset();
+          resetAvailability();
+
+          statusMsg.className = 'alert alert-success mt-4 text-center';
+          statusMsg.style.backgroundColor = 'rgba(25, 135, 84, 0.2)';
+          statusMsg.style.color = '#fff';
+          statusMsg.style.border = '1px solid #198754';
+          statusMsg.innerHTML = '<h5 class="mb-2 text-gold">Reservation Confirmed!</h5><p class="mb-0">Your table has been successfully booked.</p>';
+          statusMsg.style.display = 'block';
+          setTimeout(() => { statusMsg.style.display = 'none'; }, 10000); // Auto-hide after 10s
+        } else {
+          throw new Error("Invalid response from server");
+        }
+
+      } catch (err) {
+        console.error("Error saving booking:", err);
+        statusMsg.className = 'alert alert-danger mt-4 text-center';
+        statusMsg.innerHTML = "There was a network error communicating with the booking system. Please try again.";
+        statusMsg.style.display = 'block';
+      } finally {
+        submitBookingBtn.textContent = 'Confirm & Book via WhatsApp';
+        submitBookingBtn.disabled = false;
+      }
     });
   }
 
@@ -67,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitOrderBtn = document.getElementById('submitOrderBtn');
   const customerNameInput = document.getElementById('customerName');
   const customerPhoneInput = document.getElementById('customerPhone');
-  const tableNoInput = document.getElementById('tableNo');
+  const customerLocationInput = document.getElementById('customerLocation');
 
   const menuItems = [
     { name: 'Grilled Sourdough', price: 15.99 },
@@ -206,7 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const qtyInput = document.createElement('input');
     qtyInput.type = 'number';
     qtyInput.className = 'form-control order-item-qty';
-    qtyInput.value = '';
+    qtyInput.min = '1';
+    qtyInput.value = '1';
     qtyCol.append(qtyLabel, qtyInput);
 
     const removeCol = document.createElement('div');
@@ -231,9 +497,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     itemSelect.addEventListener('change', updateRow);
     qtyInput.addEventListener('input', () => {
-      updateOrderTotal();
-    });
-    qtyInput.addEventListener('blur', () => {
       if (!qtyInput.value || parseInt(qtyInput.value, 10) < 1) {
         qtyInput.value = '1';
       }
@@ -246,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         itemSelect.value = '';
         priceInput.value = formatCurrency(0);
-        qtyInput.value = '';
+        qtyInput.value = '1';
       }
       updateOrderTotal();
     });
@@ -261,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     orderTotalEl.textContent = formatCurrency(0);
     if (customerNameInput) customerNameInput.value = '';
     if (customerPhoneInput) customerPhoneInput.value = '';
-    if (tableNoInput) tableNoInput.value = '';
+    if (customerLocationInput) customerLocationInput.value = '';
   };
 
   const buildOrderMessage = () => {
@@ -283,12 +546,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = orderTotalEl.textContent;
     const customerName = customerNameInput ? customerNameInput.value.trim() : '';
     const customerPhone = customerPhoneInput ? customerPhoneInput.value.trim() : '';
-    const tableNo = tableNoInput ? tableNoInput.value.trim() : '';
+    const customerLocation = customerLocationInput ? customerLocationInput.value.trim() : '';
 
     let message = 'Order Request - The Grand Monarque\n\n';
     if (customerName) message += `Name: ${customerName}\n`;
     if (customerPhone) message += `Contact: ${customerPhone}\n`;
-    if (tableNo) message += `Table No: ${tableNo}\n`;
+    if (customerLocation) message += `Location: ${customerLocation}\n`;
     message += `\nItems:\n${selectedItems.join('\n')}\n\nTotal: ${total}`;
     return message;
   };
@@ -318,6 +581,65 @@ document.addEventListener('DOMContentLoaded', () => {
       const whatsappURL = `https://wa.me/94773894604?text=${encodeURIComponent(rawMessage)}`;
       window.open(whatsappURL, '_blank');
     });
+  }
+
+  // 2c. Interactive Melbourne Map for location selection
+  const orderMapContainer = document.getElementById('orderMap');
+  if (orderMapContainer && window.L) {
+    const defaultCenter = [-37.8136, 144.9631];
+    const map = L.map(orderMapContainer).setView(defaultCenter, 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const marker = L.marker(defaultCenter, { draggable: true }).addTo(map);
+    marker.bindPopup('Drag the marker or click the map to choose a location.').openPopup();
+
+    const updateLocationFromCoords = async (latlng) => {
+      if (!customerLocationInput) return;
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`);
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data && data.display_name) {
+          customerLocationInput.value = data.display_name;
+        }
+      } catch (err) {
+        console.error('Reverse geocoding failed:', err);
+      }
+    };
+
+    map.on('click', function (event) {
+      marker.setLatLng(event.latlng);
+      map.setView(event.latlng, 15);
+      updateLocationFromCoords(event.latlng);
+    });
+
+    marker.on('dragend', function () {
+      const position = marker.getLatLng();
+      map.setView(position, 15);
+      updateLocationFromCoords(position);
+    });
+
+    if (window.L.Control && window.L.Control.Geocoder) {
+      const geocoder = L.Control.Geocoder.nominatim();
+      const geocoderControl = L.Control.geocoder({
+        geocoder,
+        defaultMarkGeocode: false,
+        placeholder: 'Search Melbourne address'
+      }).addTo(map);
+
+      geocoderControl.on('markgeocode', function (e) {
+        const center = e.geocode.center;
+        marker.setLatLng(center);
+        map.setView(center, 15);
+        if (customerLocationInput) {
+          customerLocationInput.value = e.geocode.html || e.geocode.name || '';
+        }
+      });
+    }
   }
 
   // 3. Simple Password Gate for Dashboard (dashboard.html)
