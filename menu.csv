@@ -1,4 +1,4 @@
-Food Item,Price
+Item,Price
 Grilled Sourdough,15.99
 Egg & Bacon Roll,15.99
 Breakfast Burrito,16.99
@@ -8,42 +8,54 @@ Sandwich,11.99
 String Hoppers,19.99
 Roast Bread,19.99
 Coconut Roti,5.99
-Samosas (3 PCS),8.49
-Onion Rings (8 PCS),12.99
-Spring Rolls (4 PCS),14.99
-Coco Prawns (5 PCS),11.99
-Regal Calamari (4 PCS),11.99
+Samosas (3 pcs),8.49
+Onion Rings (8 pcs),8.49
+Spring Rolls (4 pcs),8.99
+Coco Prawns (5 pcs),14.99
+Regal Calamari (4 pcs),11.99
 Monarque Sharing Platter,24.99
-Grand Buffalo Wings (5 PCS),8.99
-Arancini Di Monarque (5 PCS),9.99
-Prawn & Ginger Dumplings (4 PCS),24.99
+Grand Buffalo Wings (5 pcs),12.99
+Arancini Di Monarque (5 pcs),11.99
+Prawn & Ginger Dumplings (4 pcs),11.99
 French Fries,8.49
-Mash Bombs (5 PCS),8.49
-Chicken Nuggets (6 PCS),11.99
-Vegetable Only Rice & Curry,14.99
-Chicken Rice & Curry,15.99
-Beef Rice & Curry,18.99
-Pork Rice & Curry,17.99
-Firehawk Burger + Fries,19.99
+Mash Bombs (5 pcs),11.99
+Chicken Nuggets (6 pcs),8.49
+Rice & Curry - Vegetable Only,14.99
+Rice & Curry - Chicken,15.99
+Rice & Curry - Beef,18.99
+Rice & Curry - Pork,17.99
+Smokeshow Burger + Fries,19.99
+Firehawk Burger + Fries,18.99
 Avo Wrap + Fries,21.99
 Club Sandwich,21.99
 Caesar Salad,17.99
 Salmon Niçoise Salad,22.99
 Garden Salad,13.99
-Fish & Chips,18.99
-Smokeshow Burger + Fries,23.99
-Vegetable Fried Rice,13.99
-Egg Fried Rice,14.99
-Sausage Fried Rice,16.99
-Chicken Fried Rice,17.99
-Deviled Chicken Fried Rice,18.99
-Seafood Fried Rice,21.99
-Prawn Fried Rice,20.99
-Nasi Goreng Chicken,20.99
-Nasi Goreng Seafood,23.99
-Meat Lovers’ Fried Rice,28.99
-Pork Fried Rice,19.99
-Grand Monarque Special Fried Rice,34.99
+Fish & Chips,23.99
+Vegetable Fried Rice (Medium),13.99
+Vegetable Fried Rice (Large),16.99
+Egg Fried Rice (Medium),14.99
+Egg Fried Rice (Large),17.99
+Sausage Fried Rice (Medium),16.99
+Sausage Fried Rice (Large),19.99
+Chicken Fried Rice (Medium),17.99
+Chicken Fried Rice (Large),20.99
+Deviled Chicken Fried Rice (Medium),18.99
+Deviled Chicken Fried Rice (Large),21.99
+Seafood Fried Rice (Medium),21.99
+Seafood Fried Rice (Large),24.99
+Prawn Fried Rice (Medium),20.99
+Prawn Fried Rice (Large),23.99
+Nasi Goreng Chicken (Medium),20.99
+Nasi Goreng Chicken (Large),23.99
+Nasi Goreng Seafood (Medium),23.99
+Nasi Goreng Seafood (Large),26.99
+Meat Lovers' Fried Rice (Medium),28.99
+Meat Lovers' Fried Rice (Large),31.99
+Pork Fried Rice (Medium),19.99
+Pork Fried Rice (Large),22.99
+Grand Monarque Special Fried Rice (Medium),34.99
+Grand Monarque Special Fried Rice (Large),37.99
 Vegetable Kottu (Medium),15.99
 Vegetable Kottu (Large),18.99
 Egg Kottu (Medium),16.99
@@ -54,12 +66,18 @@ Curry Chicken Kottu (Medium),18.99
 Curry Chicken Kottu (Large),21.99
 Pork Kottu (Medium),19.99
 Pork Kottu (Large),22.99
+Roast Chicken & Cheese Kottu (Medium),22.99
+Roast Chicken & Cheese Kottu (Large),25.99
 Seafood Kottu (Medium),24.99
 Seafood Kottu (Large),27.99
-Nasi Goreng,21.99
-Mongolian Rice,24.99
+Meat Lovers Special Kottu (Medium),28.99
+Meat Lovers Special Kottu (Large),31.99
+Grand Monarque Special Kottu (Medium),34.99
+Grand Monarque Special Kottu (Large),37.99
+Nasi Goreng,20.99
+Mongolian Rice,21.99
 Singapore Noodles,24.99
-Spaghetti & Meatballs,20.99
+Spaghetti & Meatballs,24.99
 Mixed Grill Feast,119.99
 Chicken Parmigiana + Fries,23.99
 Garlic Grilled Prawns,35.99
@@ -78,4 +96,4 @@ Watalappan,7.49
 Crème Caramel,6.49
 Cheesecake,9.99
 Hot Brownie,7.99
-Ice Cream (Chocolate | Vanilla),4.99
+Ice Cream (Chocolate/Vanilla),4.99
