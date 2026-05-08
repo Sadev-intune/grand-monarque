@@ -43,6 +43,24 @@ body::before {
   pointer-events: none;
 }
 
+/* Tablet */
+@media (max-width: 768px) {
+  body::before {
+    background-attachment: scroll;
+    background-position: center top;
+    filter: blur(3px) brightness(0.5);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  body::before {
+    background-attachment: scroll;
+    background-position: center center;
+    filter: blur(2px) brightness(0.5);
+  }
+}
+
 h1,
 h2,
 h3,
