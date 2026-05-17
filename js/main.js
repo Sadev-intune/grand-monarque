@@ -246,82 +246,220 @@ document.addEventListener('DOMContentLoaded', () => {
     if (timeInInput) timeInInput.addEventListener('change', resetAvailability);
     if (timeOutInput) timeOutInput.addEventListener('change', resetAvailability);
 
+    // ── BOOKING FORM VALIDATION ─────────────────────────────────────────────────
+  // Replace the existing bookingForm submit listener in main.js with this block
+
+  const bookingShowError = (inputEl, message) => {
+    bookingClearError(inputEl);
+    inputEl.style.borderColor = '#dc3545';
+    inputEl.style.boxShadow = '0 0 0 2px rgba(220,53,69,0.25)';
+    const err = document.createElement('div');
+    err.className = 'booking-validation-error';
+    err.style.cssText = [
+      'color:#dc3545',
+      'font-size:13px',
+      'margin-top:6px',
+      'padding:7px 12px',
+      'background:rgba(220,53,69,0.12)',
+      'border:1px solid rgba(220,53,69,0.4)',
+      'border-radius:6px',
+      'display:flex',
+      'align-items:center',
+      'gap:6px'
+    ].join(';');
+    err.innerHTML = `<span style="font-size:15px">⚠</span> ${message}`;
+    inputEl.parentNode.appendChild(err);
+  };
+
+  const bookingClearError = (inputEl) => {
+    inputEl.style.borderColor = '';
+    inputEl.style.boxShadow = '';
+    const existing = inputEl.parentNode.querySelector('.booking-validation-error');
+    if (existing) existing.remove();
+  };
+
+  const bookingClearAll = () => {
+    document.querySelectorAll('.booking-validation-error').forEach(e => e.remove());
+    ['name','contact','date','guests','timeIn','timeOut'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.style.borderColor = ''; el.style.boxShadow = ''; }
+    });
+  };
+
+  const isValidPhone = (phone) => {
+    const cleaned = phone.replace(/[\s\-().+]/g, '');
+    return /^\d{7,15}$/.test(cleaned); // 7–15 digits, any country
+  };
+
+  const toMins = (timeStr) => {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  if (bookingForm) {
+    // Clear individual field error on user input
+    ['name','contact','date','guests','timeIn','timeOut'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', () => bookingClearError(el));
+        el.addEventListener('change', () => bookingClearError(el));
+      }
+    });
+
     bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      bookingClearAll();
 
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('contact').value;
-      const selectedDate = document.getElementById('date').value;
-      const selectedTimeIn = document.getElementById('timeIn').value;
-      const selectedTimeOut = document.getElementById('timeOut').value;
-      const selectedTable = selectedTableInput.value;
+      const nameEl    = document.getElementById('name');
+      const contactEl = document.getElementById('contact');
+      const dateEl    = document.getElementById('date');
+      const guestsEl  = document.getElementById('guests');
+      const timeInEl  = document.getElementById('timeIn');
+      const timeOutEl = document.getElementById('timeOut');
 
-      if (!selectedTable) {
-        alert("Please select an available table.");
+      let valid = true;
+
+      // ── Full Name ──────────────────────────────────────────────────────────
+      if (!nameEl.value.trim()) {
+        bookingShowError(nameEl, 'Full name is required.');
+        valid = false;
+      } else if (nameEl.value.trim().length < 2) {
+        bookingShowError(nameEl, 'Please enter a valid full name.');
+        valid = false;
+      }
+
+      // ── Contact Number ─────────────────────────────────────────────────────
+      if (!contactEl.value.trim()) {
+        bookingShowError(contactEl, 'Contact number is required.');
+        valid = false;
+      } else if (!isValidPhone(contactEl.value.trim())) {
+        bookingShowError(contactEl, 'Enter a valid phone number (e.g. 0430 210 115 or +61 3 1234 5678).');
+        valid = false;
+      }
+
+      // ── Date ───────────────────────────────────────────────────────────────
+      if (!dateEl.value) {
+        bookingShowError(dateEl, 'Please select a date.');
+        valid = false;
+      } else {
+        const chosen = new Date(dateEl.value);
+        const today  = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (chosen < today) {
+          bookingShowError(dateEl, 'Date cannot be in the past.');
+          valid = false;
+        }
+      }
+
+      // ── Guests ─────────────────────────────────────────────────────────────
+      if (!guestsEl.value) {
+        bookingShowError(guestsEl, 'Please select the number of guests.');
+        valid = false;
+      }
+
+      // ── Time In ────────────────────────────────────────────────────────────
+      if (!timeInEl.value) {
+        bookingShowError(timeInEl, 'Please select a check-in time.');
+        valid = false;
+      }
+
+      // ── Time Out ───────────────────────────────────────────────────────────
+      if (!timeOutEl.value) {
+        bookingShowError(timeOutEl, 'Please select a check-out time.');
+        valid = false;
+      }
+
+      // ── Time logic: Time Out must be AFTER Time In ─────────────────────────
+      if (timeInEl.value && timeOutEl.value) {
+        const inMins  = toMins(timeInEl.value);
+        const outMins = toMins(timeOutEl.value);
+        if (outMins <= inMins) {
+          bookingShowError(timeOutEl, 'Check-out time must be later than check-in time.');
+          valid = false;
+        } else if (outMins - inMins < 30) {
+          bookingShowError(timeOutEl, 'Minimum booking duration is 30 minutes.');
+          valid = false;
+        }
+      }
+
+      // ── Scroll to first error ───────────────────────────────────────────────
+      if (!valid) {
+        const firstErr = document.querySelector('.booking-validation-error');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
 
-      submitBookingBtn.textContent = 'Processing...';
-      submitBookingBtn.disabled = true;
+      // ── ALL VALID — proceed with existing Google Sheets + WhatsApp logic ───
+      const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxQqSXgauAGwkUjeDpuVeEuC8upS9sCoaP-jlgzslNuQenDOo02UbChcigSALQ77Hrq/exec';
+
+      const submitBtn = document.getElementById('submitBookingBtn');
+      submitBtn.textContent = 'Processing...';
+      submitBtn.disabled = true;
+
+      // Show/hide status message
+      let statusMsg = bookingForm.querySelector('.booking-status-msg');
+      if (!statusMsg) {
+        statusMsg = document.createElement('div');
+        statusMsg.className = 'booking-status-msg alert mt-4 text-center';
+        statusMsg.style.display = 'none';
+        bookingForm.appendChild(statusMsg);
+      }
       statusMsg.style.display = 'none';
 
       try {
-        // Send data to Google Sheets (Server-side validation FIRST)
         const response = await fetch(GOOGLE_SHEET_API_URL, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
-            date: selectedDate,
-            timeIn: selectedTimeIn,
-            timeOut: selectedTimeOut,
-            tableNo: selectedTable,
-            customerName: name,
-            contactNo: phone
+            date:         dateEl.value,
+            timeIn:       timeInEl.value,
+            timeOut:      timeOutEl.value,
+            tableNo:      document.getElementById('selectedTable')?.value || '',
+            customerName: nameEl.value.trim(),
+            contactNo:    contactEl.value.trim(),
+            guests:       guestsEl.value
           })
         });
 
-        // STRICT Server Authority: Must read actual JSON response from backend
-        let result = await response.json();
+        const result = await response.json();
 
-        if (result.status === "error") {
-          // Table is already booked (server-side validation failed)
-          statusMsg.className = 'alert alert-danger mt-4 text-center';
-          statusMsg.innerHTML = `<strong>Error:</strong> ${result.message || "Selected table is not available for this time slot."}`;
-          statusMsg.style.display = 'block';
+        if (result.status === 'error') {
+          statusMsg.className = 'booking-status-msg alert mt-4 text-center';
+          statusMsg.style.cssText = 'display:block;background:rgba(220,53,69,0.15);color:#fff;border:1px solid #dc3545;border-radius:8px;padding:14px;';
+          statusMsg.innerHTML = `<strong>⚠ Error:</strong> ${result.message || 'Selected table is not available. Please choose another.'}`;
 
-          // Re-fetch available tables automatically
-          await performAvailabilityCheck();
-        } else if (result.status === "success") {
-          // Backend confirmed save -> Trigger WhatsApp
-          const message = `Reservation Request - The Grand Monarque\n\nName: ${name}\nContact: ${phone}\nDate: ${selectedDate}\nTime: ${selectedTimeIn} - ${selectedTimeOut}\nTable: ${selectedTable}`;
-          const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(message)}`;
-          window.open(whatsappURL, "_blank");
+        } else if (result.status === 'success') {
+          const msg =
+            `Reservation Request — The Grand Monarque\n\n` +
+            `Name: ${nameEl.value.trim()}\n` +
+            `Contact: ${contactEl.value.trim()}\n` +
+            `Guests: ${guestsEl.value}\n` +
+            `Date: ${dateEl.value}\n` +
+            `Time: ${timeInEl.value} – ${timeOutEl.value}\n` +
+            `Table: ${document.getElementById('selectedTable')?.value || 'TBC'}`;
 
-          // Update UI immediately (remove selected table, reset form)
-          document.querySelectorAll('.table-btn.selected').forEach(btn => btn.remove());
+          window.open(`https://wa.me/61430210115?text=${encodeURIComponent(msg)}`, '_blank');
+
           bookingForm.reset();
-          resetAvailability();
+          statusMsg.style.cssText = 'display:block;background:rgba(25,135,84,0.15);color:#fff;border:1px solid #198754;border-radius:8px;padding:14px;';
+          statusMsg.innerHTML = '<h5 style="color:#c5a059;margin-bottom:6px">Reservation Confirmed!</h5><p style="margin:0">Your table has been successfully booked.</p>';
+          setTimeout(() => { statusMsg.style.display = 'none'; }, 10000);
 
-          statusMsg.className = 'alert alert-success mt-4 text-center';
-          statusMsg.style.backgroundColor = 'rgba(25, 135, 84, 0.2)';
-          statusMsg.style.color = '#fff';
-          statusMsg.style.border = '1px solid #198754';
-          statusMsg.innerHTML = '<h5 class="mb-2 text-gold">Reservation Confirmed!</h5><p class="mb-0">Your table has been successfully booked.</p>';
-          statusMsg.style.display = 'block';
-          setTimeout(() => { statusMsg.style.display = 'none'; }, 10000); // Auto-hide after 10s
         } else {
-          throw new Error("Invalid response from server");
+          throw new Error('Invalid server response');
         }
 
       } catch (err) {
-        console.error("Error saving booking:", err);
-        statusMsg.className = 'alert alert-danger mt-4 text-center';
-        statusMsg.innerHTML = "There was a network error communicating with the booking system. Please try again.";
+        console.error('Booking error:', err);
+        statusMsg.style.cssText = 'display:block;background:rgba(220,53,69,0.15);color:#fff;border:1px solid #dc3545;border-radius:8px;padding:14px;';
+        statusMsg.innerHTML = '⚠ Network error. Please try again or contact us directly.';
         statusMsg.style.display = 'block';
+
       } finally {
-        submitBookingBtn.textContent = 'Confirm & Book via WhatsApp';
-        submitBookingBtn.disabled = false;
+        submitBtn.textContent = 'Confirm & Book via WhatsApp';
+        submitBtn.disabled = false;
       }
     });
+  }
   }
 
   // 2b. Menu Order Builder (menu.html)
@@ -571,14 +709,141 @@ document.addEventListener('DOMContentLoaded', () => {
     clearOrderBtn.addEventListener('click', resetOrder);
   }
 
+  // ── VALIDATION HELPERS ──────────────────────────────────────────────────────
+  const showError = (inputEl, message) => {
+    clearError(inputEl);
+    inputEl.style.borderColor = '#dc3545';
+    const err = document.createElement('div');
+    err.className = 'order-validation-error';
+    err.style.cssText = 'color:#dc3545;font-size:13px;margin-top:5px;padding:6px 10px;background:rgba(220,53,69,0.12);border:1px solid rgba(220,53,69,0.4);border-radius:6px;';
+    err.textContent = message;
+    inputEl.parentNode.appendChild(err);
+  };
+
+  const clearError = (inputEl) => {
+    inputEl.style.borderColor = '';
+    const existing = inputEl.parentNode.querySelector('.order-validation-error');
+    if (existing) existing.remove();
+  };
+
+  const clearAllErrors = () => {
+    document.querySelectorAll('.order-validation-error').forEach(e => e.remove());
+    [customerNameInput, customerPhoneInput, document.getElementById('tableNo')].forEach(el => {
+      if (el) el.style.borderColor = '';
+    });
+  };
+
+  const isValidAustralianPhone = (phone) => {
+    // Accepts: 04XX XXX XXX, +614XX XXX XXX, 614XXXXXXXX — strips spaces/dashes
+    const cleaned = phone.replace(/[\s\-().]/g, '');
+    return /^(\+?61)?0?4\d{8}$/.test(cleaned) ||   // Australian mobile
+           /^(\+?61)?[2378]\d{8}$/.test(cleaned) || // Australian landline
+           /^\+?\d{7,15}$/.test(cleaned);            // Any international fallback
+  };
+
+  // ── SUBMIT WITH VALIDATION ──────────────────────────────────────────────────
   if (submitOrderBtn) {
     submitOrderBtn.addEventListener('click', () => {
-      const rawMessage = buildOrderMessage();
-      if (!rawMessage) {
-        alert('Please select at least one food item with quantity before ordering.');
+      clearAllErrors();
+      let valid = true;
+
+      // 1. Check at least one food item is selected
+      const rows = Array.from(orderItemsContainer.querySelectorAll('.order-item-row'));
+      const hasItems = rows.some(row => {
+        const sel = row.querySelector('.order-item-select').value;
+        const qty = parseInt(row.querySelector('.order-item-qty').value, 10);
+        return sel && qty >= 1;
+      });
+
+      if (!hasItems) {
+        // Show error banner above the items container
+        let itemsErr = document.getElementById('orderItemsError');
+        if (!itemsErr) {
+          itemsErr = document.createElement('div');
+          itemsErr.id = 'orderItemsError';
+          itemsErr.style.cssText = 'color:#dc3545;font-size:13px;margin-bottom:10px;padding:8px 12px;background:rgba(220,53,69,0.12);border:1px solid rgba(220,53,69,0.4);border-radius:6px;';
+          orderItemsContainer.parentNode.insertBefore(itemsErr, orderItemsContainer);
+        }
+        itemsErr.textContent = '⚠ Please select at least one food item before ordering.';
+        itemsErr.style.display = 'block';
+        valid = false;
+      } else {
+        const itemsErr = document.getElementById('orderItemsError');
+        if (itemsErr) itemsErr.style.display = 'none';
+      }
+
+      // 2. Check customer name
+      if (customerNameInput) {
+        const name = customerNameInput.value.trim();
+        if (!name) {
+          showError(customerNameInput, '⚠ Customer name is required.');
+          valid = false;
+        } else if (name.length < 2) {
+          showError(customerNameInput, '⚠ Please enter a valid full name.');
+          valid = false;
+        } else {
+          clearError(customerNameInput);
+        }
+      }
+
+      // 3. Check table is selected
+      const tableNoEl = document.getElementById('tableNo');
+      if (tableNoEl && !tableNoEl.value) {
+        showError(tableNoEl, '⚠ Please select a table number.');
+        valid = false;
+      } else if (tableNoEl) {
+        clearError(tableNoEl);
+      }
+
+      // 3. Check contact number
+      if (customerPhoneInput) {
+        const phone = customerPhoneInput.value.trim();
+        if (!phone) {
+          showError(customerPhoneInput, '⚠ Contact number is required.');
+          valid = false;
+        } else if (!isValidAustralianPhone(phone)) {
+          showError(customerPhoneInput, '⚠ Phone number doesn\'t look right. Enter a valid Australian mobile (e.g. 0430 210 115) or international number.');
+          valid = false;
+        } else {
+          clearError(customerPhoneInput);
+        }
+      }
+
+      if (!valid) {
+        // Scroll to first error smoothly
+        const firstErr = document.querySelector('.order-validation-error, #orderItemsError');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
-      const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(rawMessage)}`;
+
+      // ── All valid — build and send WhatsApp message ─────────────────────────
+      const rawMessage = buildOrderMessage();
+      if (!rawMessage) return;
+
+      const tableNo = tableNoEl ? tableNoEl.value : '';
+      const customerName = customerNameInput ? customerNameInput.value.trim() : '';
+      const customerPhone = customerPhoneInput ? customerPhoneInput.value.trim() : '';
+
+      const rows2 = Array.from(orderItemsContainer.querySelectorAll('.order-item-row'));
+      const selectedItems = rows2
+        .map(row => {
+          const itemName = row.querySelector('.order-item-select').value;
+          const itemPrice = parseFloat(row.querySelector('.order-item-price').value) || 0;
+          const qty = parseInt(row.querySelector('.order-item-qty').value, 10) || 0;
+          if (!itemName || qty < 1) return null;
+          return `${itemName} x ${qty} = $${(itemPrice * qty).toFixed(2)}`;
+        })
+        .filter(Boolean);
+
+      const total = orderTotalEl.textContent;
+
+      let message = '🍽 *Order Request — The Grand Monarque*\n\n';
+      if (customerName) message += `👤 Name: ${customerName}\n`;
+      message += `📞 Contact: ${customerPhone}\n`;
+      if (tableNo) message += `🪑 Table: ${tableNo}\n`;
+      message += `\n*Items:*\n${selectedItems.join('\n')}\n\n*Total: $${total}*`;
+
+      const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(message)}`;
       window.open(whatsappURL, '_blank');
     });
   }
