@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (result.status === "success") {
           // Backend confirmed save -> Trigger WhatsApp
           const message = `Reservation Request - The Grand Monarque\n\nName: ${name}\nContact: ${phone}\nDate: ${selectedDate}\nTime: ${selectedTimeIn} - ${selectedTimeOut}\nTable: ${selectedTable}`;
-          const whatsappURL = `https://wa.me/+61492989913?text=${encodeURIComponent(message)}`;
+          const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(message)}`;
           window.open(whatsappURL, "_blank");
 
           // Update UI immediately (remove selected table, reset form)
@@ -578,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Please select at least one food item with quantity before ordering.');
         return;
       }
-      const whatsappURL = `https://wa.me/+61492989913?text=${encodeURIComponent(rawMessage)}`;
+      const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(rawMessage)}`;
       window.open(whatsappURL, '_blank');
     });
   }
