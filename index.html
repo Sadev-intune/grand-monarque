@@ -168,7 +168,17 @@
   <header class="hero-section antigravity-hero">
     <div class="container hero-content ethereal text-center">
       <div class="hero-logo-wrapper">
-        <img src="assets/LOGO.png" alt="The Grand Monarque Logo" style="width: 500px;">
+       <img src="assets/LOGO.png"
+     alt="The Grand Monarque Logo"
+     style="
+       width: 500px;
+       filter:
+         drop-shadow(3px 3px 2px rgba(0,0,0,0.35))
+         drop-shadow(6px 6px 5px rgba(0,0,0,0.25))
+         drop-shadow(-1px -1px 1px rgba(0, 0, 0, 0.6));
+       transform: perspective(800px) rotateX(2deg);
+       transition: all 0.3s ease;
+     ">
       </div>
       <h1 class="brand-font display-1 mb-4 gold-accent">Welcome to Grand Monarque</h1>
       <div class="hero-description mx-auto mt-4" style="max-width: 800px;">
