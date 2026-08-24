@@ -66,8 +66,40 @@ h6,
 }
 
 .navbar-brand img {
-  height: 60px;
+  height: 80px;
   object-fit: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  will-change: transform, box-shadow;
+  filter: drop-shadow(0 6px 12px rgba(197,160,89,0.28));
+  animation: logoPulse 4s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0% {
+    filter: drop-shadow(0 6px 12px rgba(197,160,89,0.18));
+    box-shadow: 0 0 6px rgba(197,160,89,0.12);
+  }
+  50% {
+    filter: drop-shadow(0 10px 22px rgba(197,160,89,0.36));
+    box-shadow: 0 0 22px rgba(197,160,89,0.28);
+  }
+  100% {
+    filter: drop-shadow(0 6px 12px rgba(197,160,89,0.18));
+    box-shadow: 0 0 6px rgba(197,160,89,0.12);
+  }
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.06);
+  filter: drop-shadow(0 14px 30px rgba(197,160,89,0.45));
+  box-shadow: 0 0 28px rgba(197,160,89,0.35);
+}
+
+/* Reduce logo size on very small screens */
+@media (max-width: 576px) {
+  .navbar-brand img {
+    height: 64px;
+  }
 }
 
 .nav-link {
