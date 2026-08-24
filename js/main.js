@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `Time: ${timeInEl.value} – ${timeOutEl.value}\n` +
             `Table: ${document.getElementById('selectedTable')?.value || 'TBC'}`;
 
-          window.open(`https://wa.me/61430210115?text=${encodeURIComponent(msg)}`, '_blank');
+          window.open(`https://wa.me/61492989913?text=${encodeURIComponent(msg)}`, '_blank');
 
           bookingForm.reset();
           statusMsg.style.cssText = 'display:block;background:rgba(25,135,84,0.15);color:#fff;border:1px solid #198754;border-radius:8px;padding:14px;';
@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tableNo) message += `🪑 Table: ${tableNo}\n`;
       message += `\n*Items:*\n${selectedItems.join('\n')}\n\n*Total: $${total}*`;
 
-      const whatsappURL = `https://wa.me/61430210115?text=${encodeURIComponent(message)}`;
+      const whatsappURL = `https://wa.me/61492989913?text=${encodeURIComponent(message)}`;
       window.open(whatsappURL, '_blank');
     });
   }
