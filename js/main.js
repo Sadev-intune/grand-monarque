@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.forEach(el => {
       // Skip if already has reveal class, is inside nav/footer/carousel, or is empty div
       if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-center') &&
-          !el.closest('nav') && !el.closest('footer') && !el.closest('#carouselMarquee') &&
+          !el.closest('nav') && !el.closest('footer') && !el.closest('#carouselMarquee') && !el.closest('#menuGalleryTrack') &&
           (selector !== 'div' || el.textContent.trim() !== '')) {
         antigravityElements.push(el);
       }
