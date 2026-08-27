@@ -953,6 +953,95 @@ document.addEventListener('DOMContentLoaded', () => {
       document.head.appendChild(styleSheet);
     });
   }
+  // 4b. Menu Page - Horizontal Scrolling Glassmorphism Gallery
+  const galleryTrack = document.getElementById('menuGalleryTrack');
+  if (galleryTrack) {
+    // Duplicate items once for a seamless infinite auto-scroll loop
+    galleryTrack.innerHTML += galleryTrack.innerHTML;
+
+    let autoScroll = true;
+    let isDown = false;
+    let startX = 0;
+    let scrollLeftStart = 0;
+    let resumeTimeout;
+    let halfWidth = 0;
+
+    const pauseAutoScroll = () => {
+      autoScroll = false;
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(() => { autoScroll = true; }, 2500);
+    };
+
+    const measure = () => { halfWidth = galleryTrack.scrollWidth / 2; };
+    window.addEventListener('load', measure);
+    window.addEventListener('resize', measure);
+    measure();
+
+    // Drag to scroll (desktop mouse)
+    galleryTrack.addEventListener('mousedown', (e) => {
+      isDown = true;
+      galleryTrack.classList.add('dragging');
+      startX = e.pageX;
+      scrollLeftStart = galleryTrack.scrollLeft;
+      pauseAutoScroll();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDown = false;
+      galleryTrack.classList.remove('dragging');
+    });
+
+    galleryTrack.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const walk = (e.pageX - startX) * 1.5;
+      galleryTrack.scrollLeft = scrollLeftStart - walk;
+    });
+
+    // Touch drag pauses autoplay, then resumes
+    galleryTrack.addEventListener('touchstart', pauseAutoScroll, { passive: true });
+
+    // Convert vertical mouse-wheel scroll into horizontal movement
+    galleryTrack.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        galleryTrack.scrollLeft += e.deltaY;
+      }
+      pauseAutoScroll();
+    }, { passive: false });
+
+    // Prev / Next glass buttons
+    const galleryPrevBtn = document.getElementById('galleryPrevBtn');
+    const galleryNextBtn = document.getElementById('galleryNextBtn');
+    const navScrollAmount = () => Math.min(340, galleryTrack.clientWidth * 0.8);
+
+    if (galleryPrevBtn) {
+      galleryPrevBtn.addEventListener('click', () => {
+        pauseAutoScroll();
+        galleryTrack.scrollBy({ left: -navScrollAmount(), behavior: 'smooth' });
+      });
+    }
+
+    if (galleryNextBtn) {
+      galleryNextBtn.addEventListener('click', () => {
+        pauseAutoScroll();
+        galleryTrack.scrollBy({ left: navScrollAmount(), behavior: 'smooth' });
+      });
+    }
+
+    // Slow continuous auto-scroll, looping seamlessly across the duplicated set
+    const stepGallery = () => {
+      if (autoScroll && !isDown) {
+        galleryTrack.scrollLeft += 0.6;
+        if (halfWidth && galleryTrack.scrollLeft >= halfWidth) {
+          galleryTrack.scrollLeft -= halfWidth;
+        }
+      }
+      requestAnimationFrame(stepGallery);
+    };
+    requestAnimationFrame(stepGallery);
+  }
+
   // 5. Menu Gallery Fit-to-Screen Modal Logic
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImg');
