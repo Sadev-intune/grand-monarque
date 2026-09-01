@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.forEach(el => {
       // Skip if already has reveal class, is inside nav/footer/carousel, or is empty div
       if (!el.classList.contains('reveal-left') && !el.classList.contains('reveal-right') && !el.classList.contains('reveal-center') &&
-          !el.closest('nav') && !el.closest('footer') && !el.closest('#carouselMarquee') && !el.closest('#menuGalleryTrack') &&
+          !el.closest('nav') && !el.closest('footer') && !el.closest('#carouselMarquee') && !el.closest('#menuGalleryTrack') && !el.closest('#dealsFlipbook') &&
           (selector !== 'div' || el.textContent.trim() !== '')) {
         antigravityElements.push(el);
       }
@@ -472,90 +472,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const customerPhoneInput = document.getElementById('customerPhone');
   const customerLocationInput = document.getElementById('customerLocation');
 
-  const menuItems = [
-    { name: 'Grilled Sourdough', price: 15.99 },
-    { name: 'Egg & Bacon Roll', price: 15.99 },
-    { name: 'Breakfast Burrito', price: 16.99 },
-    { name: 'Eggs Benedict', price: 17.99 },
-    { name: 'Big Breakfast', price: 29.99 },
-    { name: 'Sandwich', price: 11.99 },
-    { name: 'String Hoppers', price: 19.99 },
-    { name: 'Roast Bread', price: 19.99 },
-    { name: 'Coconut Roti', price: 5.99 },
-    { name: 'Samosas (3 PCS)', price: 8.49 },
-    { name: 'Onion Rings (8 PCS)', price: 12.99 },
-    { name: 'Spring Rolls (4 PCS)', price: 14.99 },
-    { name: 'Coco Prawns (5 PCS)', price: 11.99 },
-    { name: 'Regal Calamari (4 PCS)', price: 11.99 },
-    { name: 'Monarque Sharing Platter', price: 24.99 },
-    { name: 'Grand Buffalo Wings (5 PCS)', price: 8.99 },
-    { name: 'Arancini Di Monarque (5 PCS)', price: 9.99 },
-    { name: 'Prawn & Ginger Dumplings (4 PCS)', price: 24.99 },
-    { name: 'French Fries', price: 8.49 },
-    { name: 'Mash Bombs (5 PCS)', price: 8.49 },
-    { name: 'Chicken Nuggets (6 PCS)', price: 11.99 },
-    { name: 'Vegetable Only Rice & Curry', price: 14.99 },
-    { name: 'Chicken Rice & Curry', price: 15.99 },
-    { name: 'Beef Rice & Curry', price: 18.99 },
-    { name: 'Pork Rice & Curry', price: 17.99 },
-    { name: 'Firehawk Burger + Fries', price: 19.99 },
-    { name: 'Avo Wrap + Fries', price: 21.99 },
-    { name: 'Club Sandwich', price: 21.99 },
-    { name: 'Caesar Salad', price: 17.99 },
-    { name: 'Salmon Niçoise Salad', price: 22.99 },
-    { name: 'Garden Salad', price: 13.99 },
-    { name: 'Fish & Chips', price: 18.99 },
-    { name: 'Smokeshow Burger + Fries', price: 23.99 },
-    { name: 'Vegetable Fried Rice', price: 13.99 },
-    { name: 'Egg Fried Rice', price: 14.99 },
-    { name: 'Sausage Fried Rice', price: 16.99 },
-    { name: 'Chicken Fried Rice', price: 17.99 },
-    { name: 'Deviled Chicken Fried Rice', price: 18.99 },
-    { name: 'Seafood Fried Rice', price: 21.99 },
-    { name: 'Prawn Fried Rice', price: 20.99 },
-    { name: 'Nasi Goreng Chicken', price: 20.99 },
-    { name: 'Nasi Goreng Seafood', price: 23.99 },
-    { name: 'Meat Lovers’ Fried Rice', price: 28.99 },
-    { name: 'Pork Fried Rice', price: 19.99 },
-    { name: 'Grand Monarque Special Fried Rice', price: 34.99 },
-    { name: 'Vegetable Kottu (Medium)', price: 15.99 },
-    { name: 'Vegetable Kottu (Large)', price: 18.99 },
-    { name: 'Egg Kottu (Medium)', price: 16.99 },
-    { name: 'Egg Kottu (Large)', price: 19.99 },
-    { name: 'Roast Chicken Kottu (Medium)', price: 18.99 },
-    { name: 'Roast Chicken Kottu (Large)', price: 21.99 },
-    { name: 'Curry Chicken Kottu (Medium)', price: 18.99 },
-    { name: 'Curry Chicken Kottu (Large)', price: 21.99 },
-    { name: 'Pork Kottu (Medium)', price: 19.99 },
-    { name: 'Pork Kottu (Large)', price: 22.99 },
-    { name: 'Seafood Kottu (Medium)', price: 24.99 },
-    { name: 'Seafood Kottu (Large)', price: 27.99 },
-    { name: 'Nasi Goreng', price: 21.99 },
-    { name: 'Mongolian Rice', price: 24.99 },
-    { name: 'Singapore Noodles', price: 24.99 },
-    { name: 'Spaghetti & Meatballs', price: 20.99 },
-    { name: 'Mixed Grill Feast', price: 119.99 },
-    { name: 'Chicken Parmigiana + Fries', price: 23.99 },
-    { name: 'Garlic Grilled Prawns', price: 35.99 },
-    { name: 'Samurai Tempura Prawns', price: 32.99 },
-    { name: 'Ocean King Fish Feast', price: 35.99 },
-    { name: 'Seafood Grill Feast', price: 134.99 },
-    { name: 'Hot Butter Cuttlefish', price: 27.99 },
-    { name: 'Hot Butter Mushroom', price: 21.99 },
-    { name: 'Fried Chili Chicken', price: 23.99 },
-    { name: 'Deviled Chicken', price: 22.99 },
-    { name: 'Deviled Pork', price: 22.99 },
-    { name: 'Devilled Fish', price: 22.99 },
-    { name: 'Zesty Anchovy Fry', price: 19.99 },
-    { name: 'Kochchi Sausage Bite', price: 24.99 },
-    { name: 'Watalappan', price: 7.49 },
-    { name: 'Crème Caramel', price: 6.49 },
-    { name: 'Cheesecake', price: 9.99 },
-    { name: 'Hot Brownie', price: 7.99 },
-    { name: 'Ice Cream (Chocolate | Vanilla)', price: 4.99 }
-  ];
+  let menuItems = [];
+  let priceMap = new Map();
 
-  const priceMap = new Map(menuItems.map(item => [item.name, item.price]));
+  const parseMenuCsv = (text) => {
+    const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    return lines.slice(1).map(line => {
+      const parts = line.split(',');
+      const price = parseFloat(parts.pop());
+      const name = parts.join(',').trim();
+      return { name, price: isNaN(price) ? 0 : price };
+    }).filter(item => item.name);
+  };
+
+  const loadMenuItems = async () => {
+    try {
+      const response = await fetch('menu.csv');
+      if (!response.ok) throw new Error(`menu.csv responded with ${response.status}`);
+      const text = await response.text();
+      menuItems = parseMenuCsv(text);
+    } catch (err) {
+      console.error('Failed to load menu.csv', err);
+      menuItems = [];
+    }
+    priceMap = new Map(menuItems.map(item => [item.name, item.price]));
+    return menuItems.length > 0;
+  };
 
   const formatCurrency = (value) => value.toFixed(2);
 
@@ -695,7 +637,16 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (orderItemsContainer) {
-    orderItemsContainer.appendChild(createOrderRow());
+    loadMenuItems().then((loaded) => {
+      orderItemsContainer.appendChild(createOrderRow());
+      if (!loaded) {
+        const warning = document.createElement('div');
+        warning.className = 'order-validation-error';
+        warning.style.cssText = 'color:#dc3545;font-size:13px;margin-bottom:12px;padding:8px 12px;background:rgba(220,53,69,0.12);border:1px solid rgba(220,53,69,0.4);border-radius:6px;';
+        warning.textContent = 'Menu items could not be loaded. If you opened this page directly as a local file, please view it through a web server (e.g. the live site, or "npx serve") instead — browsers block reading menu.csv from a file:// page.';
+        orderItemsContainer.parentNode.insertBefore(warning, orderItemsContainer);
+      }
+    });
   }
 
   if (addOrderItemBtn) {
@@ -1040,6 +991,42 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(stepGallery);
     };
     requestAnimationFrame(stepGallery);
+  }
+
+  // 4c. Menu Page - "Our Special Packages" Deals Menu Flipbook
+  const dealsFlipbook = document.getElementById('dealsFlipbook');
+  if (dealsFlipbook) {
+    const dealsPages = Array.from(dealsFlipbook.querySelectorAll('.deals-page'));
+    const dealsPrevBtn = document.getElementById('dealsPrevBtn');
+    const dealsNextBtn = document.getElementById('dealsNextBtn');
+    const dealsDots = Array.from(document.querySelectorAll('#dealsPageIndicator .deals-dot'));
+    let dealsCurrent = 0;
+
+    dealsPages.forEach((page, i) => {
+      page.style.zIndex = dealsPages.length - i;
+    });
+
+    const updateDealsFlipbook = () => {
+      dealsPages.forEach((page, i) => {
+        page.style.transform = i < dealsCurrent ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+      });
+      dealsDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === dealsCurrent);
+      });
+      if (dealsPrevBtn) dealsPrevBtn.disabled = dealsCurrent === 0;
+      if (dealsNextBtn) dealsNextBtn.disabled = dealsCurrent === dealsPages.length - 1;
+    };
+
+    const goToDealsPage = (index) => {
+      dealsCurrent = Math.max(0, Math.min(dealsPages.length - 1, index));
+      updateDealsFlipbook();
+    };
+
+    if (dealsPrevBtn) dealsPrevBtn.addEventListener('click', () => goToDealsPage(dealsCurrent - 1));
+    if (dealsNextBtn) dealsNextBtn.addEventListener('click', () => goToDealsPage(dealsCurrent + 1));
+    dealsDots.forEach((dot, i) => dot.addEventListener('click', () => goToDealsPage(i)));
+
+    updateDealsFlipbook();
   }
 
   // 5. Menu Gallery Fit-to-Screen Modal Logic

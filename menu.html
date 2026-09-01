@@ -167,6 +167,45 @@
 
   </main>
 
+  <!-- Our Special Packages - Deals Menu Flipbook -->
+  <section class="container pb-5">
+    <div class="text-center mb-4">
+      <button class="btn btn-gold deals-toggle-btn" type="button" data-bs-toggle="collapse"
+        data-bs-target="#dealsMenuCollapse" aria-expanded="false" aria-controls="dealsMenuCollapse">
+        <i class="bi bi-journal-bookmark-fill me-2"></i>Our Special Packages
+        <i class="bi bi-chevron-down ms-2 deals-toggle-icon"></i>
+      </button>
+    </div>
+    <div class="collapse" id="dealsMenuCollapse">
+      <div class="deals-flipbook-wrapper glass-card text-center">
+        <h3 class="brand-font text-gold mb-1">Exclusive Deals &amp; Combo Packages</h3>
+        <p class="text-light mb-4">Flip through our specially curated deals, just for you.</p>
+
+        <div class="deals-flipbook" id="dealsFlipbook">
+          <button type="button" class="gallery-nav-btn deals-nav-prev" id="dealsPrevBtn" aria-label="Previous page">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+
+          <div class="deals-flip-stage">
+            <div class="deals-page"><img src="assets/Deals%20Menu/1.png" alt="Grand Monarque Deals Menu - page 1"></div>
+            <div class="deals-page"><img src="assets/Deals%20Menu/2.png" alt="Grand Monarque Deals Menu - page 2"></div>
+            <div class="deals-page"><img src="assets/Deals%20Menu/3.png" alt="Grand Monarque Deals Menu - page 3"></div>
+          </div>
+
+          <button type="button" class="gallery-nav-btn deals-nav-next" id="dealsNextBtn" aria-label="Next page">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="deals-page-indicator" id="dealsPageIndicator">
+          <span class="deals-dot active" data-index="0"></span>
+          <span class="deals-dot" data-index="1"></span>
+          <span class="deals-dot" data-index="2"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Order Card -->
   <section class="container py-5">
     <div class="glass-card">

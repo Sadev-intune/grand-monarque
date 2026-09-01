@@ -1063,6 +1063,12 @@ h6,
   box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
 }
 
+.gallery-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 @media (max-width: 576px) {
   .gallery-glass-item {
     width: 220px;
@@ -1076,5 +1082,98 @@ h6,
     width: 40px;
     height: 40px;
     font-size: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Menu Page - "Our Special Packages" Deals Menu Flipbook
+   ========================================================================== */
+.deals-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.deals-toggle-icon {
+  transition: transform 0.35s ease;
+  font-size: 0.8rem;
+}
+
+.deals-toggle-btn[aria-expanded="true"] .deals-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.deals-flipbook-wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.deals-flipbook {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.deals-flip-stage {
+  position: relative;
+  width: min(380px, 72vw);
+  aspect-ratio: 1413 / 2000;
+  perspective: 2200px;
+}
+
+.deals-page {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  background: #0a0a0a;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.deals-page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.deals-page-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.deals-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 160, 89, 0.5);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.deals-dot.active {
+  background: var(--color-gold);
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.6);
+}
+
+@media (max-width: 576px) {
+  .deals-flipbook {
+    gap: 0.5rem;
+  }
+
+  .deals-flip-stage {
+    width: min(280px, 62vw);
   }
 }
